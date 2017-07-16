@@ -10,5 +10,6 @@ Page({
         return util.formatTime(new Date(log))
       })
     })
+    wx.setNavigationBarTitle({title: 'Show Logs'})
   }
 })
