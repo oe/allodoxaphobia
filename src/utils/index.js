@@ -24,7 +24,11 @@ function formatTime (date) {
 
 // https://mp.weixin.qq.com/debug/wxadoc/dev/api/network-request.html
 function request (options) {
-  wx.request(options)
+  return new Promise((resolve, reject) => {
+    options.success = resolve
+    options.fail = reject
+    wx.request(options)
+  })
 }
 
 // http://lbsyun.baidu.com/index.php?title=webapi/guide/webservice-placeapi #周边检索
@@ -49,7 +53,8 @@ function request (options) {
 //    timestamp: 'xxx'
 //  }
 // 使用百度地图接口请求周边位置数据
-function getNearByLocations (data, options) {
+async function getNearbyLocations (data, options = {}) {
+  console.log(data, options)
   const defaultOptions = {
     radius: '1000', // 检索距离半径 m
     radius_limit: false, // 严格按半径检索
@@ -72,7 +77,11 @@ function getNearByLocations (data, options) {
   requestData.sn = md5(fixedEncodeURIComponent(rawStr))
   options.data = requestData
   options.url = bdMapApi
-  request(options)
+  const result = await request(options)
+  console.warn('result', result)
+  if (result.data.status !== 0) throw new Error(JSON.stringify(result.data))
+
+  return result.data.results
 }
 
 function serializeObj (obj) {
@@ -90,5 +99,5 @@ function fixedEncodeURIComponent (str) {
 export default {
   formatTime,
   request,
-  getNearByLocations
+  getNearbyLocations
 }
