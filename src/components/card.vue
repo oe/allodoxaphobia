@@ -80,6 +80,10 @@ export default {
       background-color: lightblue;
       background-image: url('~static/icons/location.svg');
     }
+    &.morra {
+      background-color: #ead0a9;
+      background-image: url('~static/icons/scissors-hand.svg');
+    }
   }
   &:nth-child(even) {
     .card-overlay {

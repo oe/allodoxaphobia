@@ -67,7 +67,6 @@ function getNearByLocations (data, options) {
   if (typeof requestData.location === 'object') {
     requestData.location = `${requestData.location.latitude},${requestData.location.longitude}`
   }
-  console.warn('requestData', requestData, serializeObj(requestData))
   let rawStr = bdMapApi.split('.com').pop() + '?' + serializeObj(requestData)
   rawStr += bdMapSK
   requestData.sn = md5(fixedEncodeURIComponent(rawStr))
