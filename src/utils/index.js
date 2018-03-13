@@ -28,6 +28,7 @@ function request (options) {
 }
 
 // http://lbsyun.baidu.com/index.php?title=webapi/guide/webservice-placeapi #周边检索
+// 算法参考 https://github.com/MadHouses/baidu_map/blob/master/index.js
 // 请求参数
 // api: http://api.map.baidu.com/place/v2/search
 //  {
@@ -47,7 +48,7 @@ function request (options) {
 //    sn: 'xxx',
 //    timestamp: 'xxx'
 //  }
-
+// 使用百度地图接口请求周边位置数据
 function getNearByLocations (data, options) {
   const defaultOptions = {
     radius: '1000', // 检索距离半径 m
@@ -59,28 +60,32 @@ function getNearByLocations (data, options) {
     ret_coordtype: 'gcj02ll', // 返回的坐标类型
     page_size: 20, // 每页最多多少条
     page_num: 0, // 页码
-    ak: 'kjvTGlp5qFHq913s4MCmiO170D4LFBeH'
-  }
-  if (typeof data.location === 'object') {
-    data.location = `${data.location.latitude},${data.location.longitude}`
+    ak: 'kjvTGlp5qFHq913s4MCmiO170D4LFBeH',
+    timestamp: Date.now()
   }
   const requestData = Object.assign({}, defaultOptions, data)
+  if (typeof requestData.location === 'object') {
+    requestData.location = `${requestData.location.latitude},${requestData.location.longitude}`
+  }
   console.warn('requestData', requestData, serializeObj(requestData))
   let rawStr = bdMapApi.split('.com').pop() + '?' + serializeObj(requestData)
   rawStr += bdMapSK
-  console.warn('rawStr', rawStr)
-  requestData.sn = md5(rawStr)
-  requestData.timestamp = Math.floor(Date.now() / 1000)
+  requestData.sn = md5(fixedEncodeURIComponent(rawStr))
   options.data = requestData
   options.url = bdMapApi
-  // console.log('before send')
   request(options)
 }
 
 function serializeObj (obj) {
   return Object.keys(obj).map(n => {
-    return encodeURIComponent(n) + '=' + encodeURIComponent(obj[n])
+    return fixedEncodeURIComponent(n) + '=' + fixedEncodeURIComponent(obj[n])
   }).join('&')
+}
+// 修正 EncodeURIComponent对特殊字符的处理
+function fixedEncodeURIComponent (str) {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+    return '%' + c.charCodeAt(0).toString(16)
+  })
 }
 
 export default {

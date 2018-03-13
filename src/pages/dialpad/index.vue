@@ -1,20 +1,22 @@
 <template>
-  <div class="app-main">
-    <card type="food" @tap="navigateTo('dialpad')">What to eat</card>
-    <card type="location" @tap="navigateTo('location')">Where to eat</card>
+  <div class="dialpad">
+    <input type="text" class="x-input" v-model="kwd">
   </div>
 </template>
 
 <script>
 // Use Vuex
-import card from '@/components/card'
 import store from './store'
+import sectors from '@/components/sectors'
 
 export default {
   data () {
+    return {
+      kwd: ''
+    }
   },
   components: {
-    card
+    sectors
   },
   computed: {
     count () {
@@ -23,7 +25,6 @@ export default {
   },
   methods: {
     navigateTo(name) {
-      console.log('navigator')
       wx.navigateTo({url: `../${name}/${name}`})
     }
   }
@@ -31,4 +32,9 @@ export default {
 
 </script>
 <style lang="scss">
+.x-input {
+  width: 80%;
+  margin: 0 auto;
+  border: 1px solid lightblue;
+}
 </style>

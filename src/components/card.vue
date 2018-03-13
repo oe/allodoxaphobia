@@ -80,7 +80,11 @@ export default {
       background-color: lightblue;
       background-image: url('~static/icons/location.svg');
     }
-
+  }
+  &:nth-child(even) {
+    .card-overlay {
+      background-position: left bottom;
+    }
   }
 }
 </style>

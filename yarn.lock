@@ -3849,8 +3849,8 @@ mpvue-loader@^1.0.0:
     vue-template-es2015-compiler "^1.5.3"
 
 mpvue-template-compiler@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/mpvue-template-compiler/-/mpvue-template-compiler-1.0.0.tgz#8682a49439ab154ff61631b094246ee0031563d2"
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mpvue-template-compiler/-/mpvue-template-compiler-1.0.1.tgz#bfd3585669b85b4f0df3a1a2dc848f7276a92389"
   dependencies:
     de-indent "^1.0.2"
     he "^1.1.0"
@@ -3861,9 +3861,9 @@ mpvue-webpack-target@^1.0.0:
   dependencies:
     webpack "^3.4.0"
 
-mpvue@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/mpvue/-/mpvue-1.0.0.tgz#047f6bcb6572e8eb5f40e8799b8aaba728c631c5"
+mpvue@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mpvue/-/mpvue-1.0.1.tgz#e1cff387117f163012bb85b4f1534091c0b73a06"
 
 ms@2.0.0:
   version "2.0.0"
