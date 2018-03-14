@@ -78,7 +78,7 @@ async function getNearbyLocations (data, options = {}) {
   options.data = requestData
   options.url = bdMapApi
   const result = await request(options)
-  console.warn('result', result)
+  // console.warn('result', result)
   if (result.data.status !== 0) throw new Error(JSON.stringify(result.data))
 
   return result.data.results
