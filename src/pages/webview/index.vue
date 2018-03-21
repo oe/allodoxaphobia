@@ -14,6 +14,7 @@ export default {
   },
   onLoad (options) {
     const query = this.$root.$mp.query
+    console.warn(query)
     const url = decodeURIComponent(query.url)
     console.warn(url)
     this.url = url.replace(/^http\:/, 'https:')
