@@ -4,14 +4,15 @@
     <input
       v-model="name"
       type="text"
-      placeholder="选项主题">
+      placeholder="选项的主题, 如: 去哪儿吃">
     <!-- <span class="btn" @tap="onSearch">GO</span> -->
   </div>
   <div class="xinput-cell">
-    <textarea></textarea>
+    <textarea v-model="optionText" placeholder="你可以以空白字符(空格, 换行等)以及逗号来分割选项"></textarea>
   </div>
   <div class="xinput-cell">
-    <input type="number" v-model="max" placeholder="最多选几项">
+    <span class="label">最多选几项</span>
+    <input min="1" type="number" v-model="max">
   </div>
   <div class="pick-btn" @tap="onSave">保存</div>
 </div>
@@ -24,22 +25,25 @@ export default {
   data () {
     return {
       name,
-      max: 0,
-      maxSelect: ['1个', '2个', '3个', '4个', '5个', '6个', '7个', '8个'],
-      rolls: [],
+      max: 1,
+      optionText: '',
       roll: {}
     }
   },
-  created () {
-    this.rolls = (wx.getStorageSync('rolls') || [])
-  },
   mounted () {
+    // this.rolls = (wx.getStorageSync('rolls') || [])
+  },
+  computed: {
+    rolls () {
+      return this.optionText.replace(/[\s,，；;]+/g, ' ').trim().split(' ')
+    }
   },
   methods: {
     onMaxChange (e) {
       this.max = e.target.value
     },
     onSave () {
+      if (!this.rolls.length || !this.name.trim() || )
     }
   }
 }
@@ -60,8 +64,15 @@ export default {
     align-items: center;
     font-weight: 100;
 
+    .label {
+      padding-left: 8px;
+      width: 120px;
+      // flex: 1;
+    }
+
     input, textarea {
       padding: 4px 8px;
+      flex: auto;
     }
 
     select {
@@ -76,40 +87,7 @@ export default {
 
   }
 
-  .result-list {
-    padding-left: 10px;
-    border-top: 1px solid whitesmoke;
-    border-bottom: 1px solid whitesmoke;
-    font-weight: 200;
 
-    .item {
-      padding: 8px 10px;
-      & + .item {
-        border-top: 1px solid whitesmoke;
-      }
-
-      .desc {
-        font-size: 14px;
-        color: #777;
-      }
-
-      .spec {
-        font-size: 10px;
-        color: #aaa;
-
-        span {
-          margin-right: 6px;
-        }
-      }
-    }
-  }
-
-  .info-tip {
-    color: #777;
-    text-align: center;
-    font-size: 16px;
-    font-weight: 200;
-  }
 
   .pick-btn {
     position: fixed;
