@@ -6,6 +6,6 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '猜拳'
+    navigationBarTitleText: '产看结果'
   }
 }

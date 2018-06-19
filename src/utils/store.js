@@ -7,16 +7,17 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    count: 0
+    schemes: []
+  },
+  getters: {
+    getSchemeByID: (state) => (sid) => {
+      return schemes.find(s => s.id === sid)
+    }
   },
   mutations: {
-    increment: (state) => {
-      const obj = state
-      obj.count += 1
-    },
-    decrement: (state) => {
-      const obj = state
-      obj.count -= 1
+    init (state) {
+      const schemes = (wx.getStorageSync('schemes') || [])
+      state.schemes = schemes
     }
   }
 })

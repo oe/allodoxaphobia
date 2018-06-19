@@ -33,17 +33,24 @@ export default {
   mounted () {
     // this.rolls = (wx.getStorageSync('rolls') || [])
   },
-  computed: {
-    rolls () {
-      return this.optionText.replace(/[\s,，；;]+/g, ' ').trim().split(' ')
-    }
+  onShow () {
+
   },
   methods: {
-    onMaxChange (e) {
-      this.max = e.target.value
+    getSchemeID () {
+      const query = this.$root.$mp.query
+      const sid = decodeURIComponent(query.sid)
+      return sid
     },
-    onSave () {
-      if (!this.rolls.length || !this.name.trim() || )
+    getScheme () {
+      const sid = this.getSchemeID()
+      if (!sid) return
+      const schemes = (wx.getStorageSync('schemes') || [])
+      const scheme = schemes.find(s => s.id === sid)
+      return scheme
+    },
+    async getResult () {
+      const options = await getOptions()
     }
   }
 }
