@@ -1,65 +1,64 @@
-// 方案定义
+// 预制方案定义
 export default [
   {
-    type: 'options',
-    name: '自定义选项',
-    form: [
-      {
-        key: 'options',
-        label: '自定义选项',
-        type: 'textarea'
-        placeholder: '自定义选项, 一行一个选项, 也可以使用分号(;) 分割选项'
-      }
-    ]
-  },
-  {
+    title: '去哪儿吃饭'
     type: 'location',
-    name: '基于地理位置筛选',
-    // 不允许多选
-    allMulti: false,
-    form: [
-      {
-        key: 'cat',
-        label: '位置类型',
-        type: 'select',
-        options: [
-          {
-            label: '',
-            value: ''
-          }
-        ]
-      },
-      {
-        key: 'kwd',
-        label: '位置关键字',
-        placeholder: '位置关键字, 可空'
-      },
-      {
-        key: 'distance',
-        label: '距离范围',
-        type: 'select',
-        options: ['1KM', '2KM', '3KM', '5KM', '10KM', '20KM']
-      }
-    ]
+    form: {
+      tag: '美食',
+      query: '美食',
+      distanceRang: '1KM'
+    }
   },
   {
-    type: 'a2z',
-    name: '从字母A~Z选择'
+    title: '周末玩什么'
+    type: 'options',
+    form: {
+      choosedCount: 1,
+      options: [
+        '爬山',
+        'K歌',
+        '看电影',
+        '骑单车',
+        '宅'
+      ].join('\n')
+    }
   },
   {
-    type: 'number',
-    name: '从数字范围选择',
-    form: [
-      {
-        key: 'min',
-        label: '数字范围',
-        type: 'number'
-      },
-      {
-        key: 'max',
-        label: '数字范围',
-        type: 'number'
-      }
-    ]
+    title: '掷骰子'
+    type: 'options',
+    form: {
+      choosedCount: 1,
+      options: [
+        '⚀',
+        '⚁',
+        '⚂',
+        '⚃',
+        '⚄',
+        '⚅'
+      ].join('\n')
+    }
+  },
+  {
+    title: '划拳'
+    type: 'options',
+    form: {
+      choosedCount: 1,
+      options: [
+        '✌️',
+        '✋',
+        '✊'
+      ].join('\n')
+    }
+  },
+  {
+    title: '抛硬币'
+    type: 'options',
+    form: {
+      choosedCount: 1,
+      options: [
+        '正面',
+        '反面'
+      ].join('\n')
+    }
   }
 ]

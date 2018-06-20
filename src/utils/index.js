@@ -96,8 +96,35 @@ function fixedEncodeURIComponent (str) {
   })
 }
 
+// 数字是否为正数
+function isInt(num) {
+  return String(parseInt(num, 10)) === num
+}
+
+function getLocation () {
+  return new Promise((resolve, reject) => {
+    wx.getLocation({
+      type: 'gcj02',
+      success: (res) => {
+        res.lat = res.latitude
+        res.lng = res.longitude
+        // this.location = res
+        // this.statusTip = '坐标获取成功😏'
+        resolve(res)
+      },
+      fail: (err) => {
+        // this.statusTip = '坐标获取失败😭, 麻烦先授权小程序获取地理位置🙏🏻'
+        err.isLocation = true
+        reject(err)
+      }
+    })
+  })
+}
+
 export default {
+  isInt,
   formatTime,
   request,
+  getLocation,
   getNearbyLocations
 }
