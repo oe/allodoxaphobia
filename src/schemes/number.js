@@ -1,7 +1,7 @@
 /**
  * 数字范围
  */
-import utils from '../utils'
+import utils from '@/utils'
 
 export default {
   name: '从数字范围选择',
@@ -44,10 +44,10 @@ export default {
     }
     return form
   },
-  getOptionCount (config) {
-    return config.form.max - config.form.min + 1
+  getOptionCount (form) {
+    return form.max - form.min + 1
   },
-  getAnOption (idx, config) {
-    return config.form.min + idx
+  getAnOption (idx, form) {
+    return form.min + idx
   }
 }

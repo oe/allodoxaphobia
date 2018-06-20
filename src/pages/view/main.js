@@ -6,6 +6,6 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '产看结果'
+    navigationBarTitleText: '查看结果'
   }
 }

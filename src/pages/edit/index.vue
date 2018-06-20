@@ -19,12 +19,12 @@
 </template>
 
 <script>
-import utils from '@/utils/index'
+// import utils from '@/utils'
 
 export default {
   data () {
     return {
-      name,
+      name: '',
       max: 1,
       optionText: '',
       roll: {}

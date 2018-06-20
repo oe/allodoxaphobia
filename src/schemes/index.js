@@ -1,4 +1,3 @@
-import utils from '../utils'
 import location from './location'
 import a2z from './a2z'
 import number from './number'
@@ -11,8 +10,16 @@ const schemes = {
   options
 }
 
+/**
+ * 从数量 len
+ * @param  {Number} len             最大可选项数量
+ * @param  {Number} count           要选出的数量
+ * @param  {Boolean} allowDuplicated 是否允许有重复的结构
+ * @return {Array}                 选出的结果的索引
+ */
 function pickIdxs (len, count, allowDuplicated) {
-  const allIdxs = Array.apply(0, Array(10)).map((v, i) => i)
+  console.log('arugments of pickIdxs', arguments)
+  const allIdxs = Array.apply(null, Array(len)).map((v, i) => i)
   if (count === len) return allIdxs
   const result = []
   while (count--) {
@@ -27,23 +34,23 @@ function pickIdxs (len, count, allowDuplicated) {
 }
 
 // 获取筛选结果
-async function getResult(schemeConfig) {
+async function getResult (schemeConfig) {
   const scheme = schemes[schemeConfig.type]
   if (!scheme) throw new Error('找不到可用的挑选方案')
-  // 总选项个数
-  const optionsCount = await scheme.getOptionsCount(schemeConfig)
   let schemeForm = schemeConfig.form
   // 预处理表单内容
   if (scheme.preprocessForm) {
     schemeForm = scheme.preprocessForm(schemeForm)
   }
+  // 总选项个数
+  const optionsCount = await scheme.getOptionCount(schemeForm, schemeConfig)
   if (!schemeForm.allowDuplicated && schemeForm.choosedCount > optionsCount) {
     throw new Error('可用选项不够选')
   }
-  const idxs = pickIdxs(optionsCount, schemeForm.choosedCount , schemeForm.allowDuplicated)
+  const idxs = pickIdxs(optionsCount, schemeForm.choosedCount || 1, schemeForm.allowDuplicated)
   return idxs
-    .map((v) => scheme.getAnOption(v, schemeConfig))
-    .filter( v => typeof v !== 'undefined')
+    .map((v) => scheme.getAnOption(v, schemeForm))
+    .filter(v => typeof v !== 'undefined')
 }
 
 export default {
@@ -56,8 +63,11 @@ export default {
       }
     })
   },
+  getScheme (schemeType) {
+    return schemes[schemeType]
+  },
   // 获取方案类型对应的默认配置
-  getDefaultForm (schemeType) {
+  getDefaultSchemeForm (schemeType) {
     const scheme = schemes[schemeType]
     const form = {}
     if (scheme.form) {
@@ -70,5 +80,5 @@ export default {
     form.choosedCount = 1
     return form
   },
-  getResult,
+  getResult
 }

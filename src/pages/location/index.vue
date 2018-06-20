@@ -107,7 +107,6 @@ export default {
             reject(err)
           }
         })
-
       })
     },
     async getNearby (kwd, distance) {
@@ -134,7 +133,7 @@ export default {
         this.statusTip = result.length ? '获取成功' : '你要找的地方估计在火星吧😢'
       } catch (e) {
         this.status = 'failed'
-        if (!err.isLocation) {
+        if (!e.isLocation) {
           this.statusTip = '扫描失败😱, 可能网络故障中...'
         }
         console.log('failed to get nearby', e)

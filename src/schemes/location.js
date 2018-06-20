@@ -1,7 +1,7 @@
 /**
  * 地理位置
  */
-import utils from '../utils'
+import utils from '@/utils'
 
 export default {
   name: '基于地理位置筛选',
@@ -14,7 +14,7 @@ export default {
       type: 'select',
       default: '美食',
       options: [
-        '美食', '酒店', '购物', '生活服务', '丽人', '旅游景点', '休闲娱乐', '运动健身', '教育培训', '文化传媒', '医疗', '汽车服务', '交通设施', '金融', '房地产', '公司企业', '政府机构', '出入口', '自然地物',
+        '美食', '酒店', '购物', '生活服务', '丽人', '旅游景点', '休闲娱乐', '运动健身', '教育培训', '文化传媒', '医疗', '汽车服务', '交通设施', '金融', '房地产', '公司企业', '政府机构', '出入口', '自然地物'
       ]
     },
     {
@@ -39,14 +39,14 @@ export default {
     return form
   },
   locations: [],
-  async getOptionCount (config) {
-    const result = await this.getLocations(config)
+  async getOptionCount (form) {
+    const result = await this.getLocations(form)
     return result.length
   },
-  async getLocations (config) {
+  async getLocations (form) {
     this.locations = []
     const location = await utils.getLocation()
-    const result = await utils.getNearbyLocations(Object.assign({}, config.form, {
+    const result = await utils.getNearbyLocations(Object.assign({}, form, {
       location
     }))
     this.locations = result

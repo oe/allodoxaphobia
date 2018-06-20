@@ -31,7 +31,7 @@ export default {
       // 增加offset, 系统自带的扑克符号中J和Q中多了一个C
       cp += Math.floor(idx / SUITE_COUNT) + Math.floor((idx % SUITE_COUNT) / 11)
       return {
-        char: String.fromCodePoint(cp)
+        char: String.fromCodePoint(cp),
         color: COLORS[(sc - 1) % 2]
       }
     }

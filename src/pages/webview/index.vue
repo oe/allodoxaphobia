@@ -9,7 +9,7 @@
 export default {
   data () {
     return {
-      url: '',
+      url: ''
     }
   },
   onLoad (options) {
@@ -17,7 +17,7 @@ export default {
     console.warn(query)
     const url = decodeURIComponent(query.url)
     console.warn(url)
-    this.url = url.replace(/^http\:/, 'https:')
+    this.url = url.replace(/^http:/, 'https:')
   }
 }
 </script>

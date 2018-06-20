@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import App from './App'
+import presets from './schemes/presets'
+import store from './utils/store'
 
+Vue.prototype.$store = store
 Vue.config.productionTip = false
 App.mpType = 'app'
-
+presets()
 const app = new Vue(App)
 app.$mount()
 

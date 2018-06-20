@@ -97,7 +97,7 @@ function fixedEncodeURIComponent (str) {
 }
 
 // 数字是否为正数
-function isInt(num) {
+function isInt (num) {
   return String(parseInt(num, 10)) === num
 }
 
@@ -121,9 +121,32 @@ function getLocation () {
   })
 }
 
+function guid () {
+  function s4 () {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1)
+  }
+  return (
+    s4() +
+    s4() +
+    '-' +
+    s4() +
+    '-' +
+    s4() +
+    '-' +
+    s4() +
+    '-' +
+    s4() +
+    s4() +
+    s4()
+  )
+}
+
 export default {
   isInt,
   formatTime,
+  guid,
   request,
   getLocation,
   getNearbyLocations

@@ -1,39 +1,41 @@
 <template>
   <div class="app-main">
-    <card type="food" @tap="navigateTo('dialpad')">What to eat</card>
-    <card type="location" @tap="navigateTo('location')">Where to eat</card>
-    <card type="morra" @tap="navigateTo('morra')">Guess my finger</card>
+    <div
+      class="blueprint-item"
+      v-for="bp in blueprints"
+      :key="bp.id"
+      @tap="navigateTo(bp.id)">
+      {{bp.title}}
+    </div>
   </div>
 </template>
 
 <script>
-// Use Vuex
-import card from '@/components/card'
-import store from './store'
-
+import { mapState, mapMutations } from 'vuex'
 export default {
-  data () {
-  },
-  components: {
-    card
-  },
   computed: {
-    count () {
-      return store.state.count
-    }
+    ...mapState(['blueprints'])
   },
   onShow () {
-    console.log('main show')
     wx.stopAccelerometer()
   },
   methods: {
-    navigateTo(name) {
+    ...mapMutations(['switch2']),
+    navigateTo (id) {
+      this.switch2(id)
       console.log('navigator')
-      wx.navigateTo({url: `../${name}/${name}`})
+      wx.navigateTo({url: `../view/view?sid=${id}`})
     }
   }
 }
 
 </script>
 <style lang="scss">
+.blueprint-item {
+  color: #666;
+  margin: 10px;
+  padding: 4px 8px;
+  background-color: #efefef;
+  border-radius: 6px;
+}
 </style>

@@ -1,7 +1,7 @@
 /**
  * 自定义选项
  */
-export default   {
+export default {
   name: '自定义选项',
   form: [
     {
@@ -12,11 +12,11 @@ export default   {
       placeholder: '自定义选项, 一行一个选项, 也可以使用分号(;) 分割选项'
     }
   ],
-  getOptionCount (config) {
-    return config.options.length
+  getOptionCount (form) {
+    return form.options.length
   },
-  getAnOption (idx, config) {
-    return config.options[idx]
+  getAnOption (idx, form) {
+    return form.options[idx]
   },
   // 清理要保存的数据
   purgeForm (form) {
@@ -24,7 +24,7 @@ export default   {
     form.options = form.options
       .split(/[\n;；]/g)
       .map(v => v.trim())
-      .filter( v => !!v).join('\n')
+      .filter(v => !!v).join('\n')
     return form
   },
   // 校验数据合法性
