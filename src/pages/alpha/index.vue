@@ -34,7 +34,7 @@ export default {
 .blueprint-item {
   color: #666;
   margin: 10px;
-  padding: 4px 8px;
+  padding: 10px 8px;
   background-color: #efefef;
   border-radius: 6px;
 }

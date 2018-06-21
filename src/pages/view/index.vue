@@ -1,22 +1,65 @@
 <template>
 <div class="view-result">
-  {{result}}
+  <div class="blueprint" :class="'is-' + blueprint.type" v-if="blueprint">
+    <div class="blueprint-title">{{ blueprint.title }}</div>
+    <div v-if="status === 'failed'" class="scheme-error">
+      {{error}} error
+    </div>
+    <div v-if="status === 'success'" class="scheme-result">
+      <template v-if="blueprint.type === 'location'">
+        <location-item
+          v-for="(item, k) in result"
+          :key="k"
+          :item="item"
+          :is="blueprint.type + '-item'">
+        </location-item>
+      </template>
+      <template v-if="blueprint.type === 'options'">
+        <options-item
+          v-for="(item, k) in result"
+          :key="k"
+          :item="item"
+          :is="blueprint.type + '-item'">
+        </options-item>
+      </template>
+
+    </div>
+    <div v-if="status === 'pending'" class="scheme-pending">
+      loading...
+    </div>
+
+    <div class="try-again" @tap="getResult">one more</div>
+  </div>
+  <NoBlueprint v-else></NoBlueprint>
 </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
 import schemes from '@/schemes'
+import NoBlueprint from './no-blueprint'
+import LocationItem from './items/location'
+import OptionsItem from './items/options'
 
 export default {
   data () {
     return {
-      result: '',
+      status: 'pending',
+      error: '',
+      result: null,
       lastShakeTime: 0,
       lastShake: { x: 0, y: 0, z: 0 }
     }
   },
+  // components,
+  components: {
+    NoBlueprint,
+    LocationItem,
+    OptionsItem
+  },
   mounted () {
+    this.status = 'pending'
+    this.result = null
     if (!this.blueprint) {
       const query = this.$root.$mp.query
       query.id && this.switch2(query.id)
@@ -29,20 +72,28 @@ export default {
   methods: {
     ...mapMutations(['switch2']),
     updatePage () {
-      this.updateTitle()
+      // this.updateTitle()
       if (!this.blueprint) return
       this.getResult()
       wx.onAccelerometerChange(this.shake)
     },
-    updateTitle () {
-      console.log('title', this.blueprint && this.blueprint.title)
-      wx.setNavigationBarTitle({
-        title: this.blueprint && this.blueprint.title || '找不到选项'
-      })
-    },
     async getResult () {
-      const result = await schemes.getResult(this.blueprint)
-      this.result = JSON.stringify(result)
+      try {
+        console.log('before get result')
+        let result = await schemes.getResult(this.blueprint)
+        console.log('after get result', result)
+        if (!Array.isArray(result)) result = [result]
+        if (!result.length) throw new Error('😱木有找到选项')
+        this.result = result
+        this.status = 'success'
+      } catch (e) {
+        this.status = 'failed'
+        if (e.isLocation) {
+          this.error = '获取地理位置失败, 请先授权小程序获取地理位置, 或者授权允许微信获取地理位置'
+        } else {
+          this.error = e.message
+        }
+      }
     },
     shake (acc) {
       const nowTime = Date.now() // 记录当前时间
@@ -57,7 +108,7 @@ export default {
       }
       // 计算 公式的意思是 单位时间内运动的路程，即为我们想要的速度
       var speed = Math.abs(cur.x + cur.y + cur.z - this.lastShake.x - this.lastShake.y - this.lastShake.z) / diffTime * 10000
-      console.log(speed)
+      // console.log(speed)
       // //如果计算出来的速度超过了阈值，那么就算作用户成功摇一摇
       if (speed > 80) {
         wx.vibrateLong()
@@ -71,4 +122,34 @@ export default {
 </script>
 
 <style lang="scss">
+.blueprint-title {
+  text-align: center;
+  color: #888;
+}
+.view-result,
+.blueprint {
+  height: 100%;
+}
+.scheme-error,
+.scheme-pending {
+  color: #888;
+  height: 60%;
+  display: flex;//必须有，不然没有效果
+  justify-content: center;
+  align-items: center;
+}
+
+.try-again {
+  position: fixed;
+  bottom: 10px;
+  width: 50px;
+  height: 50px;
+  border-radius:50%;
+  background-color:lightblue;
+  font-size:15px;
+  text-align:center;
+  left:0;
+  right:0;
+  margin:0 auto;
+}
 </style>

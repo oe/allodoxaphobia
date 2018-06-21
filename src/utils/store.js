@@ -33,13 +33,12 @@ const store = new Vuex.Store({
         } else {
           blueprint.id = utils.guid()
         }
-        state.blueprints.push(blueprint)
       }
+      state.blueprints.push(...blueprints)
       saveBlueprints(state)
     }
   }
 })
-
 function saveBlueprints (state) {
   wx.setStorageSync('blueprints', state.blueprints)
 }

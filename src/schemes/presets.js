@@ -3,7 +3,7 @@ import store from '@/utils/store'
 const presets = [
   {
     id: 'allodoxaphobia-food',
-    title: '🍛去哪儿吃饭',
+    title: '🍛 去哪儿吃饭',
     type: 'location',
     form: {
       choosedCount: 1,
@@ -14,7 +14,7 @@ const presets = [
   },
   {
     id: 'allodoxaphobia-play',
-    title: '🎾周末玩什么',
+    title: '🎾 周末玩什么',
     type: 'options',
     form: {
       choosedCount: 1,
@@ -29,7 +29,7 @@ const presets = [
   },
   {
     id: 'allodoxaphobia-dices',
-    title: '🎲掷骰子',
+    title: '🎲 掷骰子',
     type: 'options',
     form: {
       choosedCount: 1,
@@ -45,7 +45,7 @@ const presets = [
   },
   {
     id: 'allodoxaphobia-morra',
-    title: '✌️划拳',
+    title: '✌️ 划拳',
     type: 'options',
     form: {
       choosedCount: 1,
@@ -58,7 +58,7 @@ const presets = [
   },
   {
     id: 'allodoxaphobia-coins',
-    title: '🥇抛硬币',
+    title: '🥇 抛硬币',
     type: 'options',
     form: {
       choosedCount: 1,
@@ -79,6 +79,5 @@ export default function () {
   console.log('start install presets')
   wx.setStorageSync('presets-installed', 'installed')
   store.commit('addBlueprints', presets)
-  store.commit('init')
   console.log('install presets sucessfully')
 }

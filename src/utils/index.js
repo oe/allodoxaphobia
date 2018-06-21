@@ -102,10 +102,12 @@ function isInt (num) {
 }
 
 function getLocation () {
+  console.log('before get location')
   return new Promise((resolve, reject) => {
     wx.getLocation({
       type: 'gcj02',
       success: (res) => {
+        console.log('get location success')
         res.lat = res.latitude
         res.lng = res.longitude
         // this.location = res
@@ -113,9 +115,13 @@ function getLocation () {
         resolve(res)
       },
       fail: (err) => {
+        console.log('get location failed', err)
         // this.statusTip = '坐标获取失败😭, 麻烦先授权小程序获取地理位置🙏🏻'
         err.isLocation = true
         reject(err)
+      },
+      complete (ee) {
+        console.log('get location complete')
       }
     })
   })
