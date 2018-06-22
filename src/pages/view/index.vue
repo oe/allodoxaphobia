@@ -1,5 +1,5 @@
 <template>
-<div class="view-result">
+<div class="view-result" :class="isIphoneX ? 'is-iphonex' : ''">
   <div class="blueprint" :class="'is-' + blueprint.type" v-if="blueprint">
     <div class="blueprint-title">{{ blueprint.title }}</div>
     <div v-if="status === 'failed'" class="scheme-error">
@@ -10,19 +10,30 @@
         <location-item
           v-for="(item, k) in result"
           :key="k"
-          :item="item"
-          :is="blueprint.type + '-item'">
+          :item="item">
         </location-item>
       </template>
       <template v-if="blueprint.type === 'options'">
         <options-item
           v-for="(item, k) in result"
           :key="k"
-          :item="item"
-          :is="blueprint.type + '-item'">
+          :item="item">
         </options-item>
       </template>
-
+      <template v-if="blueprint.type === 'number'">
+        <options-item
+          v-for="(item, k) in result"
+          :key="k"
+          :item="item">
+        </options-item>
+      </template>
+      <template v-if="blueprint.type === 'poker'">
+        <poker-item
+          v-for="(item, k) in result"
+          :key="k"
+          :item="item">
+        </poker-item>
+      </template>
     </div>
     <div v-if="status === 'pending'" class="scheme-pending">
       loading...
@@ -40,6 +51,7 @@ import schemes from '@/schemes'
 import NoBlueprint from './no-blueprint'
 import LocationItem from './items/location'
 import OptionsItem from './items/options'
+import PokerItem from './items/poker'
 
 export default {
   data () {
@@ -55,7 +67,8 @@ export default {
   components: {
     NoBlueprint,
     LocationItem,
-    OptionsItem
+    OptionsItem,
+    PokerItem
   },
   mounted () {
     this.status = 'pending'
@@ -67,7 +80,7 @@ export default {
     this.updatePage()
   },
   computed: {
-    ...mapState(['blueprint'])
+    ...mapState(['blueprint', 'isIphoneX'])
   },
   methods: {
     ...mapMutations(['switch2']),
@@ -151,5 +164,9 @@ export default {
   left:0;
   right:0;
   margin:0 auto;
+
+  .is-iphonex & {
+    bottom: 30px;
+  }
 }
 </style>

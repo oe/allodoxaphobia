@@ -2,8 +2,8 @@ import store from '@/utils/store'
 // 预制方案定义
 const presets = [
   {
-    id: 'allodoxaphobia-food',
-    title: '🍛 去哪儿吃饭',
+    id: 'allodoxaphobia-wherefood',
+    title: '📌 去哪儿吃饭',
     type: 'location',
     form: {
       choosedCount: 1,
@@ -13,8 +13,24 @@ const presets = [
     }
   },
   {
+    id: 'allodoxaphobia-eatfood',
+    title: '🍛 吃什么',
+    type: 'options',
+    form: {
+      choosedCount: 1,
+      options: [
+        '湘菜',
+        '烧烤',
+        '粤菜',
+        '川菜',
+        '沙县小吃',
+        '火锅'
+      ].join('\n')
+    }
+  },
+  {
     id: 'allodoxaphobia-play',
-    title: '🎾 周末玩什么',
+    title: '🏖 周末玩什么',
     type: 'options',
     form: {
       choosedCount: 1,
@@ -67,17 +83,37 @@ const presets = [
         '反面'
       ].join('\n')
     }
+  },
+  {
+    id: 'allodoxaphobia-getpoker',
+    title: '🃏 选张扑克牌',
+    type: 'poker',
+    form: {
+      choosedCount: 1
+    }
+  },
+  {
+    id: 'allodoxaphobia-getnumber',
+    title: '💯 选个幸运数',
+    type: 'number',
+    form: {
+      choosedCount: 1,
+      min: 1,
+      max: 100
+    }
   }
 ]
 
 export default function () {
-  const hasInstalled = wx.getStorageSync('presets-installed')
-  if (hasInstalled) {
+  const ver = '0.2'
+  const installedVer = wx.getStorageSync('presets-installed')
+  if (installedVer === ver) {
     console.log('presets installed already')
     return
   }
   console.log('start install presets')
-  wx.setStorageSync('presets-installed', 'installed')
+  wx.setStorageSync('blueprints', [])
+  wx.setStorageSync('presets-installed', ver)
   store.commit('addBlueprints', presets)
   console.log('install presets sucessfully')
 }

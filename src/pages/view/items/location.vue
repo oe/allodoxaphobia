@@ -4,9 +4,9 @@
   <h4 class="title">{{item.name}}</h4>
   <p class="desc">{{item.address}}</p>
   <p class="spec">
-    <span v-if="item.detail_info.distance">距离{{distance}}</span>
+    <span v-if="detail_info.distance">距离{{distance}}</span>
     <span v-if="item.telephone">☎️{{item.telephone}}</span>
-    <span v-if="item.detail_info.price">¥{{item.detail_info.price}}</span>
+    <span v-if="detail_info.price">¥{{detail_info.price}}</span>
   </p>
   </div>
   <div><small>地图数据由百度提供, 如有差错, 不关我事</small></div>
@@ -21,13 +21,16 @@ export default {
   mixins: [mixin],
   computed: {
     hasBaiduURL () {
-      return this.item && this.item.detail_info.detail_url
+      return this.item && this.detail_info.detail_url
     },
     distance () {
       if (!this.item) return 0
-      const d = this.item.detail_info.distance
+      const d = this.detail_info.distance
       if (d <= 1000) return `${d}m`
       else return (d / 1000).toFixed(2) + 'km'
+    },
+    detail_info () {
+      return this.item.detail_info || {}
     }
   },
   methods: {
@@ -44,8 +47,7 @@ export default {
       })
     },
     openBaidu () {
-      const item = this.item
-      let url = item.detail_info.detail_url
+      let url = this.detail_info.detail_url
       url = `../webview/webview?url=${encodeURIComponent(url)}`
       console.log('url', url)
       wx.navigateTo({url})

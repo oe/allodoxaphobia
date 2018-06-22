@@ -1,6 +1,7 @@
 import md5 from 'blueimp-md5'
 const bdMapApi = 'https://api.map.baidu.com/place/v2/search'
 const bdMapSK = 'dCGxoToz0SiyIGsYjunrz83Il1gdM4d6'
+const LOCATION_SCOPE = 'scope.userLocation'
 
 function formatNumber (n) {
   const str = n.toString()
@@ -101,7 +102,12 @@ function isInt (num) {
   return String(parseInt(num, 10)) === num
 }
 
-function getLocation () {
+// 获取地理位置
+async function getLocation () {
+  const config = await getSetting()
+  if (!config || !config[LOCATION_SCOPE]) {
+    await authorize(LOCATION_SCOPE)
+  }
   console.log('before get location')
   return new Promise((resolve, reject) => {
     wx.getLocation({
@@ -124,6 +130,24 @@ function getLocation () {
         console.log('get location complete')
       }
     })
+  })
+}
+
+// 授权
+function authorize (scope) {
+  return new Promise((resolve, reject) => {
+    wx.authorize({
+      scope,
+      success: resolve,
+      fail: reject
+    })
+  })
+}
+
+// 获取微信配置项
+function getSetting () {
+  return new Promise((resolve, reject) => {
+    wx.getSetting({success: (res) => resolve(res.authSetting), fail: reject})
   })
 }
 

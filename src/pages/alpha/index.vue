@@ -4,9 +4,10 @@
       class="blueprint-item"
       v-for="bp in blueprints"
       :key="bp.id"
-      @tap="navigateTo(bp.id)">
+      @tap="viewOption(bp.id)">
       {{bp.title}}
     </div>
+    <button class="blueprint-item" @tap="addOption">add option</button>
   </div>
 </template>
 
@@ -21,10 +22,13 @@ export default {
   },
   methods: {
     ...mapMutations(['switch2']),
-    navigateTo (id) {
+    viewOption (id) {
       this.switch2(id)
       console.log('navigator')
       wx.navigateTo({url: `../view/view?sid=${id}`})
+    },
+    addOption () {
+      wx.navigateTo({url: `../edit/edit`})
     }
   }
 }

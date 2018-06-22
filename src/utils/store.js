@@ -8,6 +8,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    isIphoneX: false,
     blueprints: [],
     blueprint: null
   },
@@ -36,13 +37,33 @@ const store = new Vuex.Store({
       }
       state.blueprints.push(...blueprints)
       saveBlueprints(state)
+    },
+    set2iphoneX (state) {
+      state.isIphoneX = true
+    }
+  },
+  actions: {
+    detectDevice (ctx) {
+      wx.getSystemInfo({
+        success: (res) => {
+          let modelmes = res.model
+          console.log('system info', res)
+          if (modelmes.search('iPhone X') !== -1) {
+            ctx.commit('set2iphoneX')
+          }
+        },
+        fail (e) {
+          console.warn('failed to get system info')
+        }
+      })
     }
   }
 })
+
 function saveBlueprints (state) {
   wx.setStorageSync('blueprints', state.blueprints)
 }
 // debugger
 store.commit('init')
-
+store.dispatch('detectDevice')
 export default store

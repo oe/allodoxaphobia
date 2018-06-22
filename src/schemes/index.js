@@ -2,12 +2,14 @@ import location from './location'
 import a2z from './a2z'
 import number from './number'
 import options from './options'
+import poker from './poker'
 
 const schemes = {
+  options,
   location,
   a2z,
   number,
-  options
+  poker
 }
 
 /**

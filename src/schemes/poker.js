@@ -4,7 +4,7 @@
 
 const SUITE = ['♠️', '♥️', '♣️', '♦️']
 const COLORS = ['black', 'red']
-const SUITE_START = '🂢'
+const SUITE_START = '🂡'
 const SUITE_COUNT = 13
 const JOKER = '🃟'
 
@@ -16,11 +16,11 @@ export default {
     // 选项不允许重复, 且筛选出的数量超过选项总数量
     if (!form.allowDuplicated && optionCount <= form.choosedCount) throw new Error(`筛选项数量(${form.choosedCount})不能大于扑克牌总数量`)
   },
-  getOptionsCount () {
+  getOptionCount () {
     return SUITE_COUNT * SUITE.length + 2
   },
   getAnOption (idx) {
-    const sc = Match.ceil(idx / SUITE_COUNT)
+    const sc = Math.ceil((idx + 1) / SUITE_COUNT)
     if (sc > SUITE.length) {
       return {
         char: JOKER,
@@ -29,7 +29,7 @@ export default {
     } else {
       let cp = SUITE_START.codePointAt(0) + idx
       // 增加offset, 系统自带的扑克符号中J和Q中多了一个C
-      cp += Math.floor(idx / SUITE_COUNT) + Math.floor((idx % SUITE_COUNT) / 11)
+      cp += Math.floor(idx / SUITE_COUNT) * 3 + Math.floor((idx % SUITE_COUNT) / 11)
       return {
         char: String.fromCodePoint(cp),
         color: COLORS[(sc - 1) % 2]
