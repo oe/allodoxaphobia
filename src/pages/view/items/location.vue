@@ -48,7 +48,9 @@ export default {
     },
     openBaidu () {
       let url = this.detail_info.detail_url
+      console.warn('url', url)
       url = `../webview/webview?url=${encodeURIComponent(url)}`
+      // url = `../webview/webview?url=${encodeURIComponent('https://mp.weixin.qq.com/s/4J40rrKCBABAtTl6dWLnEA')}`
       console.log('url', url)
       wx.navigateTo({url})
     }

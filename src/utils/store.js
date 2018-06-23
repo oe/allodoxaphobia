@@ -18,7 +18,17 @@ const store = new Vuex.Store({
       state.blueprints = blueprints
     },
     switch2 (state, id) {
-      state.blueprint = state.blueprints.find(s => s.id === id)
+      state.blueprint = (id && state.blueprints.find(s => s.id === id)) || null
+    },
+    // 清空缓存的 blueprint
+    clearBlueprint (state) {
+      state.blueprint = null
+    },
+    removeBlueprint (state, id) {
+      const idx = state.blueprints.findIndex(b => b.id === id)
+      if (idx === -1) return
+      state.blueprints.splice(idx, 1)
+      saveBlueprints(state.blueprints)
     },
     addBlueprints (state, blueprints) {
       if (!Array.isArray(blueprints)) blueprints = [blueprints]
@@ -36,7 +46,7 @@ const store = new Vuex.Store({
         }
       }
       state.blueprints.push(...blueprints)
-      saveBlueprints(state)
+      saveBlueprints(state.blueprints)
     },
     set2iphoneX (state) {
       state.isIphoneX = true
@@ -60,8 +70,8 @@ const store = new Vuex.Store({
   }
 })
 
-function saveBlueprints (state) {
-  wx.setStorageSync('blueprints', state.blueprints)
+function saveBlueprints (blueprints) {
+  wx.setStorageSync('blueprints', blueprints)
 }
 // debugger
 store.commit('init')

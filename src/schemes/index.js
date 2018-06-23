@@ -20,7 +20,6 @@ const schemes = {
  * @return {Array}                 选出的结果的索引
  */
 function pickIdxs (len, count, allowDuplicated) {
-  console.log('arugments of pickIdxs', arguments)
   const allIdxs = Array.apply(null, Array(len)).map((v, i) => i)
   if (count === len) return allIdxs
   const result = []

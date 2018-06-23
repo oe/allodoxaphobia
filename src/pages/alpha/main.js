@@ -6,7 +6,10 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '关爱选择困难症',
-    navigationBarBackgroundColor: 'lightblue'
+    navigationBarBackgroundColor: '#992299',
+    navigationBarTextStyle: 'white',
+    backgroundColor: '#992299',
+    backgroundTextStyle: 'light',
+    navigationBarTitleText: '关爱选择困难症'
   }
 }

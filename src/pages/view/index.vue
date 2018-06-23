@@ -1,6 +1,6 @@
 <template>
-<div class="view-result" :class="isIphoneX ? 'is-iphonex' : ''">
-  <div class="blueprint" :class="'is-' + blueprint.type" v-if="blueprint">
+<div class="view-page" :class="isIphoneX ? 'is-iphonex' : ''">
+  <div class="blueprint page-main" :class="'is-' + blueprint.type" v-if="blueprint">
     <div class="blueprint-title">{{ blueprint.title }}</div>
     <div v-if="status === 'failed'" class="scheme-error">
       {{error}} error
@@ -27,6 +27,13 @@
           :item="item">
         </options-item>
       </template>
+      <template v-if="blueprint.type === 'a2z'">
+        <options-item
+          v-for="(item, k) in result"
+          :key="k"
+          :item="item">
+        </options-item>
+      </template>
       <template v-if="blueprint.type === 'poker'">
         <poker-item
           v-for="(item, k) in result"
@@ -38,22 +45,27 @@
     <div v-if="status === 'pending'" class="scheme-pending">
       loading...
     </div>
-
-    <div class="try-again" @tap="getResult">one more</div>
   </div>
   <NoBlueprint v-else></NoBlueprint>
+  <div class="toolbar" v-if="blueprint">
+    <div class="btn-center try-again" @tap="getResult">one more</div>
+    <div class="edit-btn" @tap="onEditBlueprint">修改</div>
+  </div>
+
 </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
 import schemes from '@/schemes'
+import pmixin from '../pmixin'
 import NoBlueprint from './no-blueprint'
 import LocationItem from './items/location'
 import OptionsItem from './items/options'
 import PokerItem from './items/poker'
 
 export default {
+  mixins: [pmixin],
   data () {
     return {
       status: 'pending',
@@ -70,17 +82,18 @@ export default {
     OptionsItem,
     PokerItem
   },
-  mounted () {
+  created () {
     this.status = 'pending'
     this.result = null
-    if (!this.blueprint) {
-      const query = this.$root.$mp.query
-      query.id && this.switch2(query.id)
-    }
+  },
+  mounted () {
+    const query = this.$root.$mp.query
+    console.log('quryid', query)
+    this.switch2(query.id)
     this.updatePage()
   },
   computed: {
-    ...mapState(['blueprint', 'isIphoneX'])
+    ...mapState(['blueprint'])
   },
   methods: {
     ...mapMutations(['switch2']),
@@ -90,6 +103,11 @@ export default {
       this.getResult()
       wx.onAccelerometerChange(this.shake)
     },
+    onEditBlueprint () {
+      const id = this.blueprint.id
+      console.log('going to edit of id', id)
+      wx.navigateTo({url: `../edit/edit?id=${id}`})
+    },
     async getResult () {
       try {
         console.log('before get result')
@@ -97,6 +115,7 @@ export default {
         console.log('after get result', result)
         if (!Array.isArray(result)) result = [result]
         if (!result.length) throw new Error('😱木有找到选项')
+        wx.vibrateShort()
         this.result = result
         this.status = 'success'
       } catch (e) {
@@ -135,38 +154,29 @@ export default {
 </script>
 
 <style lang="scss">
-.blueprint-title {
-  text-align: center;
-  color: #888;
-}
-.view-result,
-.blueprint {
-  height: 100%;
-}
-.scheme-error,
-.scheme-pending {
-  color: #888;
-  height: 60%;
-  display: flex;//必须有，不然没有效果
-  justify-content: center;
-  align-items: center;
-}
-
-.try-again {
-  position: fixed;
-  bottom: 10px;
-  width: 50px;
-  height: 50px;
-  border-radius:50%;
-  background-color:lightblue;
-  font-size:15px;
-  text-align:center;
-  left:0;
-  right:0;
-  margin:0 auto;
-
-  .is-iphonex & {
-    bottom: 30px;
+.view-page {
+  .blueprint-title {
+    text-align: center;
+    color: #888;
   }
+  .scheme-error,
+  .scheme-pending {
+    color: #888;
+    height: 60%;
+    display: flex;//必须有，不然没有效果
+    justify-content: center;
+    align-items: center;
+  }
+  .toolbar { background-color: #efefef;}
+  .try-again {
+    background-color: lightblue;
+    font-size:15px;
+    text-align:center;
+
+    .is-iphonex & {
+      bottom: 30px;
+    }
+  }
+
 }
 </style>

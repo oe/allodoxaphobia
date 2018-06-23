@@ -21,13 +21,13 @@ export default {
       key: 'query',
       label: '位置关键字',
       default: '',
-      placeholder: '位置关键字, 使用 $ 分割多个关键字'
+      tip: '位置关键字, 使用 $ 分割多个关键字'
     },
     {
       key: 'distanceRang',
       label: '距离范围',
       type: 'select',
-      default: '3KM',
+      default: '2',
       options: ['1KM', '2KM', '3KM', '5KM', '10KM', '20KM']
     }
   ],

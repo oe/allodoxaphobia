@@ -97,18 +97,12 @@ function fixedEncodeURIComponent (str) {
   })
 }
 
-// 数字是否为正数
-function isInt (num) {
-  return String(parseInt(num, 10)) === num
-}
-
 // 获取地理位置
 async function getLocation () {
   const config = await getSetting()
   if (!config || !config[LOCATION_SCOPE]) {
     await authorize(LOCATION_SCOPE)
   }
-  console.log('before get location')
   return new Promise((resolve, reject) => {
     wx.getLocation({
       type: 'gcj02',
@@ -174,7 +168,6 @@ function guid () {
 }
 
 export default {
-  isInt,
   formatTime,
   guid,
   request,
