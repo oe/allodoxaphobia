@@ -63,7 +63,20 @@
     </block>
   </div>
   <div class="toolbar">
-    <div class="btn-center pick-btn" @tap="onSave">保存</div>
+    <div class="toolbar-item-2">
+      <div v-if="blueprint" class="toolbar-item" @tap="onTrash">
+        <div class="icon icon-trash"></div>
+        删除
+      </div>
+    </div>
+    <div class="toolbar-item" @tap="onSave">
+      <view class="btn-center icon icon-shake"></view>
+    </div>
+    <div class="toolbar-item">
+      <div class="icon icon-feedback"></div>
+      反馈
+    </div>
+    <div class="toolbar-item"></div>
   </div>
 </div>
 </template>
@@ -127,7 +140,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['addBlueprints', 'switch2']),
+    ...mapMutations(['addBlueprints', 'switch2', 'removeBlueprint']),
     onScanCode (key) {
       wx.scanCode({
         onlyFromCamera: false,
@@ -188,6 +201,28 @@ export default {
         })
       }
     },
+    onTrash () {
+      if (!this.blueprint) return
+      wx.showModal({
+        title: '提示',
+        content: `确定删除 ${this.blueprint.title} 吗?`,
+        confirmColor: '#ee0000',
+        success: (res) => {
+          if (!res.confirm) return
+          this.removeBlueprint(this.blueprint.id)
+          wx.showToast({
+            title: '删除成功',
+            mask: true,
+            icon: 'success'
+          })
+          setTimeout(() => {
+            wx.reLaunch({
+              url: `../alpha/alpha`
+            })
+          }, 1600)
+        }
+      })
+    },
     onPickerChnage (e, k) {
       console.log('onPickerChnage', e, k)
       this.form[k] = e.target.value
@@ -221,7 +256,7 @@ export default {
 <style lang="scss">
 .edit-page {
   height: 100%;
-  background-color: whitesmoke;
+  background-color: #efefef;
   .xinput-title {
     margin-top: .77em;
     margin-bottom: .3em;
@@ -290,19 +325,8 @@ export default {
     }
   }
   .toolbar {
-    background-color: lightblue;
-  }
-  .pick-btn {
-    background-color: #32c24d;
-    text-align: center;
-    color: #fff;
-    font-weight: 100;
-    line-height: 60px;
-    font-size: 14px;
-    opacity: .9;
-
-    &:active {
-      opacity: 1;
+    .btn-center {
+      background-color: #aef4a4;
     }
   }
 }

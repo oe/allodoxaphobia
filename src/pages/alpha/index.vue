@@ -10,7 +10,19 @@
       </div>
     </div>
     <div class="toolbar">
-      <view class="btn-center add-option iconfont icon-add" @tap="addOption"></view>
+      <div class="toolbar-item"></div>
+      <div class="toolbar-item">
+        <div class="icon icon-order"></div>
+        排序
+      </div>
+      <div class="toolbar-item" @tap="addOption">
+        <view class="btn-center icon icon-add"></view>
+      </div>
+      <div class="toolbar-item" @tap="onFeedBack">
+        <div class="icon icon-feedback"></div>
+        反馈
+      </div>
+      <div class="toolbar-item"></div>
     </div>
   </div>
 </template>
@@ -32,6 +44,11 @@ export default {
     },
     addOption () {
       wx.navigateTo({url: `../edit/edit`})
+    },
+    onFeedBack () {
+      let url = 'https://mp.weixin.qq.com/s/0-M2wAiqPioay2BLVWoefg'
+      url = `../webview/webview?url=${encodeURIComponent(url)}`
+      wx.navigateTo({url})
     }
   }
 }
@@ -56,16 +73,10 @@ $iphonex-bottom: 34px;
   border-radius: 6px;
 }
 .toolbar {
-  background-color: whitesmoke;
 
-  .add-option {
-    text-align: center;
-    line-height: 60px;
-    font-size: 25px;
+  .btn-center {
+    color: white;
     background-color: rgba(153, 34, 153, .7);
-    &:before {
-      display: block;
-    }
   }
 }
 

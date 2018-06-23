@@ -12,7 +12,7 @@ export default {
     font-style: normal;
 }
 
-.iconfont {
+.icon {
   font-family:"iconfont" !important;
   /*font-size:16px;*/
   font-style:normal;
@@ -44,10 +44,35 @@ $iphonex-bottom: 34px;
 .toolbar {
   z-index: 999;
   position: fixed;
+  display: flex;
   bottom: 0;
   left: 0;
   width: 100%;
   height: $bar-height;
+  background-color: whitesmoke;
+
+  .toolbar-item {
+    flex: 1;
+  }
+
+  .toolbar-item-2 {
+    flex: 2;
+  }
+
+  .toolbar-item,
+  .toolbar-item-2 {
+    text-align: center;
+    color: #999;
+    font-size: 12px;
+
+    &:active {
+      color: #666;
+    }
+
+    .icon {
+      font-size: 30px;
+    }
+  }
 
   .is-iphonex & {
     height: $bar-height;
@@ -55,16 +80,23 @@ $iphonex-bottom: 34px;
   }
 
   .btn-center {
-    position: absolute;
+    position: relative;
+    color: #666;
     top: -30px;
     width: 60px;
     height: 60px;
     border-radius: 50%;
     border: none;
-    left:0;
-    right:0;
     margin-left:auto;
     margin-right:auto;
+
+    &.icon {
+      line-height: 60px;
+      font-size: 30px;
+      &:before {
+        display: block;
+      }
+    }
   }
 }
 

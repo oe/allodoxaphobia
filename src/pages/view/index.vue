@@ -48,8 +48,25 @@
   </div>
   <NoBlueprint v-else></NoBlueprint>
   <div class="toolbar" v-if="blueprint">
-    <div class="btn-center try-again" @tap="getResult">one more</div>
-    <div class="edit-btn" @tap="onEditBlueprint">修改</div>
+    <div class="toolbar-item">
+      <div class="icon icon-adjust"></div>
+      微调
+    </div>
+    <div class="toolbar-item">
+      <div class="icon icon-copy"></div>
+      复制结果
+    </div>
+    <div class="toolbar-item">
+      <div class="btn-center icon icon-gift" @tap="getResult"></div>
+    </div>
+    <div class="toolbar-item" @tap="onEditBlueprint">
+      <div class="icon icon-edit"></div>
+      编辑
+    </div>
+    <div class="toolbar-item">
+      <div class="icon icon-feedback"></div>
+      反馈
+    </div>
   </div>
 
 </div>
@@ -167,14 +184,9 @@ export default {
     justify-content: center;
     align-items: center;
   }
-  .toolbar { background-color: #efefef;}
-  .try-again {
-    background-color: lightblue;
-    font-size:15px;
-    text-align:center;
-
-    .is-iphonex & {
-      bottom: 30px;
+  .toolbar {
+    .btn-center {
+      background-color: #fffdb7;
     }
   }
 
