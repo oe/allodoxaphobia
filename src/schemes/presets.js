@@ -9,7 +9,7 @@ const presets = [
       choosedCount: 1,
       tag: '美食',
       query: '美食',
-      distanceRang: '1KM'
+      distanceRang: '1km'
     }
   },
   {
@@ -105,14 +105,14 @@ const presets = [
 ]
 
 export default function () {
-  const ver = '0.2'
+  const ver = '0.3'
   const installedVer = wx.getStorageSync('presets-installed')
   if (installedVer === ver) {
     console.log('presets installed already')
     return
   }
   console.log('start install presets')
-  wx.setStorageSync('blueprints', [])
+  store.commit('removeAllBlueprint')
   wx.setStorageSync('presets-installed', ver)
   store.commit('addBlueprints', presets)
   console.log('install presets sucessfully')

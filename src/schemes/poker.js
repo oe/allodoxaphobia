@@ -35,5 +35,11 @@ export default {
         color: COLORS[(sc - 1) % 2]
       }
     }
+  },
+  getSchemeDesc (form) {
+    let desc = `从${this.getOptionCount()}张扑克牌中选出`
+    desc += form.allowDuplicated ? '重复的' : '不重复的'
+    desc += `${form.choosedCount}张牌`
+    return desc
   }
 }

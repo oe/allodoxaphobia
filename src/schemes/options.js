@@ -45,5 +45,12 @@ export default {
     form = Object.assign({}, form)
     form.options = form.options.split('\n')
     return form
+  },
+  getSchemeDesc (form) {
+    form = this.preprocessForm(form)
+    let desc = `从${form.options.length}个选项中选出`
+    desc += form.allowDuplicated ? '重复的' : '不重复的'
+    desc += `${form.choosedCount}个选项`
+    return desc
   }
 }

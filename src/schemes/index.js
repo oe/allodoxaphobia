@@ -46,7 +46,13 @@ async function getResult (schemeConfig) {
   // 总选项个数
   const optionsCount = await scheme.getOptionCount(schemeForm, schemeConfig)
   if (!schemeForm.allowDuplicated && schemeForm.choosedCount > optionsCount) {
-    throw new Error('可用选项不够选')
+    let tip = '可用选项不够选'
+    if (!optionsCount && schemeConfig.type === 'location') {
+      tip = '附近有点荒凉啊, 没有找到任何相关位置'
+    } else {
+      console.error('can not get enough options to choose', schemeConfig, 'optionsCount', optionsCount)
+    }
+    throw new Error(tip)
   }
   const idxs = pickIdxs(optionsCount, schemeForm.choosedCount || 1, schemeForm.allowDuplicated)
   return idxs

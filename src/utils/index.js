@@ -3,26 +3,6 @@ const bdMapApi = 'https://api.map.baidu.com/place/v2/search'
 const bdMapSK = 'dCGxoToz0SiyIGsYjunrz83Il1gdM4d6'
 const LOCATION_SCOPE = 'scope.userLocation'
 
-function formatNumber (n) {
-  const str = n.toString()
-  return str[1] ? str : `0${str}`
-}
-
-function formatTime (date) {
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-
-  const hour = date.getHours()
-  const minute = date.getMinutes()
-  const second = date.getSeconds()
-
-  const t1 = [year, month, day].map(formatNumber).join('/')
-  const t2 = [hour, minute, second].map(formatNumber).join(':')
-
-  return `${t1} ${t2}`
-}
-
 // https://mp.weixin.qq.com/debug/wxadoc/dev/api/network-request.html
 function request (options) {
   return new Promise((resolve, reject) => {
@@ -167,8 +147,25 @@ function guid () {
   )
 }
 
+function confirm (config) {
+  return new Promise((resolve, reject) => {
+    wx.showModal(Object.assign({}, config, {
+      success: (res) => {
+        if (res.confirm) resolve(res)
+        else {
+          res.isConfirm = true
+          reject(res)
+        }
+      },
+      fail (err) {
+        console.warn('failed to call wx.showModal with config', config, err)
+      }
+    }))
+  })
+}
+
 export default {
-  formatTime,
+  confirm,
   guid,
   request,
   getLocation,

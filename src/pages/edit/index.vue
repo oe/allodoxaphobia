@@ -84,6 +84,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import schemes from '@/schemes'
+import utils from '@/utils'
 import pmixin from '../pmixin'
 const allTypes = schemes.getSchemeTypes()
 
@@ -92,7 +93,6 @@ export default {
   data () {
     return {
       title: '',
-      chooosedCount: 1,
       typeIdx: 0,
       form: {}
     }
@@ -153,7 +153,7 @@ export default {
         }
       })
     },
-    onSave () {
+    async onSave () {
       let form = Object.assign({}, this.form)
       console.warn('form', form)
       form.allowDuplicated = form.allowDuplicated === '1'
@@ -165,10 +165,10 @@ export default {
         })
       }
 
-      if (this.scheme.purgeForm) form = this.scheme.purgeForm(form)
+      if (this.scheme.purgeForm) form = await this.scheme.purgeForm(form)
       try {
         this.validateCommon()
-        if (this.scheme.validateForm) this.scheme.validateForm(form)
+        if (this.scheme.validateForm) await this.scheme.validateForm(form)
         const blueprint = {
           form,
           title: this.title,
@@ -183,16 +183,18 @@ export default {
           mask: true,
           icon: 'success'
         })
-        // wx.navigateBack({
-        //   delta: 1
-        // })
         // 重定向到首页
         setTimeout(() => {
-          wx.reLaunch({
-            url: `../alpha/alpha`
+          wx.navigateBack({
+            delta: 1
           })
+          // wx.reLaunch({
+          //   url: `../alpha/alpha`
+          // })
         }, 1600)
       } catch (e) {
+        // ignore error from confirm dialog
+        if (e.isConfirm) return
         console.log(e)
         wx.showModal({
           title: '保存选项失败',
@@ -201,27 +203,29 @@ export default {
         })
       }
     },
-    onTrash () {
+    async onTrash () {
       if (!this.blueprint) return
-      wx.showModal({
-        title: '提示',
-        content: `确定删除 ${this.blueprint.title} 吗?`,
-        confirmColor: '#ee0000',
-        success: (res) => {
-          if (!res.confirm) return
-          this.removeBlueprint(this.blueprint.id)
-          wx.showToast({
-            title: '删除成功',
-            mask: true,
-            icon: 'success'
+      try {
+        const res = await utils.confirm({
+          title: '提示',
+          content: `确定删除 ${this.blueprint.title} 吗?`,
+          confirmColor: '#ee0000'
+        })
+        if (!res.confirm) return
+        this.removeBlueprint(this.blueprint.id)
+        wx.showToast({
+          title: '删除成功',
+          mask: true,
+          icon: 'success'
+        })
+        setTimeout(() => {
+          wx.reLaunch({
+            url: `../alpha/alpha`
           })
-          setTimeout(() => {
-            wx.reLaunch({
-              url: `../alpha/alpha`
-            })
-          }, 1600)
-        }
-      })
+        }, 1600)
+      } catch (e) {
+        console.log('use canceled', e)
+      }
     },
     onPickerChnage (e, k) {
       console.log('onPickerChnage', e, k)
@@ -243,10 +247,22 @@ export default {
     },
     validateCommon () {
       if (!this.title.trim()) throw new Error('请填写方案主题')
+      const form = this.form
+      Object.keys(form).forEach((k) => {
+        if (typeof form[k] === 'string' && form[k] === '') {
+          let title = '所有表单项'
+          if (k === 'choosedCount') {
+            title = '选几项'
+          } else if (this.scheme.form) {
+            const config = this.scheme.form.find(f => f.key === k)
+            if (config) title = config.label
+          }
+          throw new Error(`请填写 ${title}`)
+        }
+      })
     },
     resetForm () {
       this.title = ''
-      this.chooosedCount = 1
       this.typeIdx = 0
     }
   }

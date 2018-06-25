@@ -30,6 +30,10 @@ const store = new Vuex.Store({
       state.blueprints.splice(idx, 1)
       saveBlueprints(state.blueprints)
     },
+    removeAllBlueprint (state) {
+      state.blueprints = []
+      saveBlueprints([])
+    },
     addBlueprints (state, blueprints) {
       if (!Array.isArray(blueprints)) blueprints = [blueprints]
       for (let i = 0; i < blueprints.length; i++) {

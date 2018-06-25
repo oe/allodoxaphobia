@@ -40,5 +40,12 @@ export default {
   },
   getAnOption (idx, form) {
     return form.min + idx
+  },
+  getSchemeDesc (form) {
+    form = this.preprocessForm(form)
+    let desc = `从${form.min}~${form.max}中选出`
+    desc += form.allowDuplicated ? '重复的' : '不重复的'
+    desc += `${form.choosedCount}个数字`
+    return desc
   }
 }

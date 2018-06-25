@@ -2,8 +2,9 @@
 <div class="view-page" :class="isIphoneX ? 'is-iphonex' : ''">
   <div class="blueprint page-main" :class="'is-' + blueprint.type" v-if="blueprint">
     <div class="blueprint-title">{{ blueprint.title }}</div>
+    <div class="blueprint-desc">{{ blueprintDesc }}</div>
     <div v-if="status === 'failed'" class="scheme-error">
-      {{error}} error
+      {{error}}
     </div>
     <div v-if="status === 'success'" class="scheme-result">
       <template v-if="blueprint.type === 'location'">
@@ -57,7 +58,7 @@
       复制结果
     </div>
     <div class="toolbar-item">
-      <div class="btn-center icon icon-gift" @tap="getResult"></div>
+      <div class="btn-center icon icon-gift" @tap="onOnemore"></div>
     </div>
     <div class="toolbar-item" @tap="onEditBlueprint">
       <div class="icon icon-edit"></div>
@@ -110,7 +111,15 @@ export default {
     this.updatePage()
   },
   computed: {
-    ...mapState(['blueprint'])
+    ...mapState(['blueprint']),
+    scheme () {
+      if (!this.blueprint) return
+      return schemes.getScheme(this.blueprint.type)
+    },
+    blueprintDesc () {
+      if (!this.scheme || !this.scheme.getSchemeDesc) return ''
+      return this.scheme.getSchemeDesc(this.blueprint.form, this.blueprint)
+    }
   },
   methods: {
     ...mapMutations(['switch2']),
@@ -125,13 +134,18 @@ export default {
       console.log('going to edit of id', id)
       wx.navigateTo({url: `../edit/edit?id=${id}`})
     },
+    onOnemore () {
+      if (this.status === 'pending') return
+      this.getResult()
+    },
     async getResult () {
       try {
-        console.log('before get result')
+        this.status = 'pending'
         let result = await schemes.getResult(this.blueprint)
-        console.log('after get result', result)
         if (!Array.isArray(result)) result = [result]
-        if (!result.length) throw new Error('😱木有找到选项')
+        if (!result.length) {
+          throw new Error('😱木有找到任何可用选项, 这可能是个bug')
+        }
         wx.vibrateShort()
         this.result = result
         this.status = 'success'
@@ -173,13 +187,23 @@ export default {
 <style lang="scss">
 .view-page {
   .blueprint-title {
+    padding: 4px 8px;
+    margin-top: 10px;
+    font-size: 20px;
     text-align: center;
+    color: #333;
+  }
+  .blueprint-desc {
+    padding: 0 8px 6px;
+    text-align: center;
+    font-size: 14px;
     color: #888;
   }
   .scheme-error,
   .scheme-pending {
     color: #888;
     height: 60%;
+    padding: 8px;
     display: flex;//必须有，不然没有效果
     justify-content: center;
     align-items: center;

@@ -28,9 +28,21 @@ export default {
       label: '距离范围',
       type: 'select',
       default: '2',
-      options: ['1KM', '2KM', '3KM', '5KM', '10KM', '20KM']
+      options: ['1km', '2km', '3km', '5km', '10km', '20km']
     }
   ],
+  async validateForm (form) {
+    const opt = this.preprocessForm(form)
+    const len = await this.getOptionCount(opt)
+    if (len) return
+    await utils.confirm({
+      title: '附近无相关位置',
+      content: `在附近方圆 ${form.distanceRang} 未找到 ${form.tag} 类别中包含关键字 "${form.query}" 的位置, 是否继续添加?`,
+      cancelText: '再想想',
+      confirmText: '仍然添加',
+      confirmColor: '#E6A23C'
+    })
+  },
   // 使用前预处理数据
   preprocessForm (form) {
     form = Object.assign({}, form)
@@ -39,11 +51,27 @@ export default {
     return form
   },
   locations: [],
+  lastCall: null,
   async getOptionCount (form) {
+    // 结果缓存10s
+    const CACHE_TIME = 10 * 1000
+    const now = Date.now()
+    const kwd = form.tag + '|' + form.distance + '|' + form.query
+    // 搜索条件相关, 时间在 CACHE_TIME 之类, 则使用缓存结果
+    if (this.lastCall &&
+      this.lastCall.kwd === kwd &&
+      (now - this.lastCall.time) <= CACHE_TIME) {
+      return this.locations.length
+    }
     const result = await this.getLocations(form)
+    this.lastCall = {
+      kwd,
+      time: now
+    }
     return result.length
   },
   async getLocations (form) {
+    console.warn('get locations with', form)
     this.locations = []
     const location = await utils.getLocation()
     const result = await utils.getNearbyLocations(Object.assign({}, form, {
@@ -54,5 +82,9 @@ export default {
   },
   getAnOption (idx) {
     return this.locations[idx]
+  },
+  getSchemeDesc (form) {
+    const desc = `从方圆${form.distanceRang}中选出${form.tag}类别中包含关键字${form.query}的位置`
+    return desc
   }
 }
