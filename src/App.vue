@@ -56,6 +56,7 @@ $iphonex-bottom: 34px;
   }
 
   .toolbar-item-2 {
+    display: flex;
     flex: 2;
   }
 

@@ -21,14 +21,14 @@ export default {
       key: 'query',
       label: '位置关键字',
       default: '',
-      tip: '位置关键字, 使用 $ 分割多个关键字'
+      tip: '使用 $ 分割多个关键字'
     },
     {
       key: 'distanceRang',
       label: '距离范围',
       type: 'select',
       default: '2',
-      options: ['1km', '2km', '3km', '5km', '10km', '20km']
+      options: ['1km', '2km', '3km', '5km', '10km', '20km', '50km', '100km', '200km']
     }
   ],
   async validateForm (form) {
@@ -86,5 +86,30 @@ export default {
   getSchemeDesc (form) {
     const desc = `从方圆${form.distanceRang}中选出${form.tag}类别中包含关键字${form.query}的位置`
     return desc
+  },
+  getResultDesc (result, blueprint) {
+    let str = blueprint.title + '\n'
+    return str + result.map((item) => {
+      let ls = [
+        item.name,
+        item.address
+      ]
+      let str = ''
+      if (item.detail_info && item.detail_info.distance) {
+        str += '距离: ' + utils.formatDistance(item.detail_info.distance)
+      }
+      if (item.telephone) str += ' / 电话: ' + item.telephone
+      if (item.detail_info && item.detail_info.price) {
+        str += ' / 价格: ' + item.detail_info.price
+      }
+      ls.push(str)
+      if (item.detail_info && item.detail_info.detail_url) {
+        ls.push('百度详情: ' + item.detail_info.detail_url)
+      }
+      return ls.join('\n')
+    }).join('\n\n')
+  },
+  getAdjustList () {
+    return []
   }
 }

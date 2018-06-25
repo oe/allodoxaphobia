@@ -84,14 +84,14 @@ const presets = [
       ].join('\n')
     }
   },
-  {
-    id: 'allodoxaphobia-getpoker',
-    title: '🃏 选张扑克牌',
-    type: 'poker',
-    form: {
-      choosedCount: 1
-    }
-  },
+  // {
+  //   id: 'allodoxaphobia-getpoker',
+  //   title: '🃏 选张扑克牌',
+  //   type: 'poker',
+  //   form: {
+  //     choosedCount: 1
+  //   }
+  // },
   {
     id: 'allodoxaphobia-getnumber',
     title: '💯 选个幸运数',
@@ -105,7 +105,7 @@ const presets = [
 ]
 
 export default function () {
-  const ver = '0.3'
+  const ver = '0.4'
   const installedVer = wx.getStorageSync('presets-installed')
   if (installedVer === ver) {
     console.log('presets installed already')

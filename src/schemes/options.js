@@ -9,7 +9,7 @@ export default {
       label: '自定义选项',
       type: 'textarea',
       default: '',
-      tip: '自定义选项, 一行一个选项, 也可以使用分号(;) 分割选项'
+      tip: '一行一个选项, 也可以使用分号(;) 分割选项'
     }
   ],
   getOptionCount (form) {
@@ -38,7 +38,7 @@ export default {
     duplicated = duplicated.filter((k, i) => i === duplicated.indexOf(k))
     if (duplicated.length) throw new Error(`以下选项重复, 请检查后再提交\n${duplicated.join(';')}`)
     // 结果不允许重复时, 且筛选出的数量超过选项总数量
-    if (!form.allowDuplicated && optionCount <= form.choosedCount) throw new Error(`可用选项数量(${optionCount})应大于筛选项数量(${form.choosedCount})`)
+    if (!form.allowDuplicated && optionCount < form.choosedCount) throw new Error(`可用选项数量(${optionCount})应不小于筛选项数量(${form.choosedCount})`)
   },
   // 使用前预处理数据
   preprocessForm (form) {

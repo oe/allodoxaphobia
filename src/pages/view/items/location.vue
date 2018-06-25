@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import utils from '@/utils'
 import mixin from './mixin'
 export default {
   mixins: [mixin],
@@ -24,9 +25,7 @@ export default {
     },
     distance () {
       if (!this.item) return 0
-      const d = this.detail_info.distance
-      if (d <= 1000) return `${d}m`
-      else return (d / 1000).toFixed(2) + 'km'
+      return utils.formatDistance(this.detail_info.distance)
     },
     detail_info () {
       return this.item.detail_info || {}

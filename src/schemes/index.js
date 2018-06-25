@@ -2,14 +2,14 @@ import location from './location'
 import a2z from './a2z'
 import number from './number'
 import options from './options'
-import poker from './poker'
+// import poker from './poker'
 
 const schemes = {
   options,
   location,
   a2z,
-  number,
-  poker
+  number
+  // poker
 }
 
 /**
@@ -21,7 +21,8 @@ const schemes = {
  */
 function pickIdxs (len, count, allowDuplicated) {
   const allIdxs = Array.apply(null, Array(len)).map((v, i) => i)
-  if (count === len) return allIdxs
+  // 随机排序
+  if (count === len) return allIdxs.sort(() => Math.random() > 0.5 ? -1 : 1)
   const result = []
   while (count--) {
     const idx = Math.floor(Math.random() * allIdxs.length)

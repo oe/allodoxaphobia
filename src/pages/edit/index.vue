@@ -64,6 +64,7 @@
   </div>
   <div class="toolbar">
     <div class="toolbar-item-2">
+      <div class="toolbar-item"></div>
       <div v-if="blueprint" class="toolbar-item" @tap="onTrash">
         <div class="icon icon-trash"></div>
         删除
@@ -175,7 +176,6 @@ export default {
           type: this.schemeType
         }
         if (this.blueprint) blueprint.id = this.blueprint.id
-        console.warn('blueprint', blueprint)
         this.addBlueprints(blueprint)
         const title = this.blueprint ? '方案修改成功' : '方案添加成功'
         wx.showToast({

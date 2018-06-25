@@ -164,7 +164,26 @@ function confirm (config) {
   })
 }
 
+function formatDistance (d) {
+  if (!d) return
+  if (d <= 1000) return `${d}m`
+  else return (d / 1000).toFixed(2) + 'km'
+}
+
+function copy (str, tip) {
+  wx.setClipboardData({
+    data: str
+  })
+  wx.showToast({
+    title: tip,
+    mask: true,
+    icon: 'success'
+  })
+}
+
 export default {
+  copy,
+  formatDistance,
   confirm,
   guid,
   request,

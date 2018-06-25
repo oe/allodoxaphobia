@@ -36,20 +36,22 @@ const store = new Vuex.Store({
     },
     addBlueprints (state, blueprints) {
       if (!Array.isArray(blueprints)) blueprints = [blueprints]
+      const newBps = []
       for (let i = 0; i < blueprints.length; i++) {
         const blueprint = blueprints[i]
         if (!blueprint) continue
         if (blueprint.id) {
           const idx = state.blueprints.findIndex(b => b.id === blueprint.id)
           if (idx !== -1) {
-            state.blueprints.splice(idx, 1, blueprint)
-            return
+            state.blueprints[idx] = blueprint
+            continue
           }
         } else {
           blueprint.id = utils.guid()
+          newBps.push(blueprint)
         }
       }
-      state.blueprints.push(...blueprints)
+      newBps.length && state.blueprints.push(...newBps)
       saveBlueprints(state.blueprints)
     },
     set2iphoneX (state) {

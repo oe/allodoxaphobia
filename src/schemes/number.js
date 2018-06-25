@@ -8,13 +8,13 @@ export default {
   form: [
     {
       key: 'min',
-      label: '数字范围',
+      label: '数字范围起点',
       default: 1,
       type: 'number'
     },
     {
       key: 'max',
-      label: '数字范围',
+      label: '数字范围终点',
       default: 10,
       type: 'number'
     }
