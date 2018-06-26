@@ -109,7 +109,25 @@ export default {
       return ls.join('\n')
     }).join('\n\n')
   },
-  getAdjustList () {
-    return []
+  getAdjustList (form, vm) {
+    const distanceRangs = this.getDistanceRanges()
+    const distanceRang = form.distanceRang
+    const idx = distanceRangs.findIndex(d => d === distanceRang)
+    return {ranges: [ distanceRangs ], indexs: [ idx === -1 ? 0 : idx ]}
+  },
+  getDistanceRanges () {
+    let distanceRangs = this.form.find(itm => itm.key === 'distanceRang')
+    return distanceRangs.options
+  },
+  columnChange () {},
+  adjustChange (detail, vm) {
+    const idx = detail.value[0]
+    const distanceRangs = this.getDistanceRanges()
+    vm.editBlueprint({
+      id: vm.blueprint.id,
+      form: {
+        distanceRang: distanceRangs[idx]
+      }
+    })
   }
 }

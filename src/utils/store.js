@@ -41,17 +41,28 @@ const store = new Vuex.Store({
         const blueprint = blueprints[i]
         if (!blueprint) continue
         if (blueprint.id) {
-          const idx = state.blueprints.findIndex(b => b.id === blueprint.id)
-          if (idx !== -1) {
-            state.blueprints[idx] = blueprint
+          const bp = state.blueprints.find(b => b.id === blueprint.id)
+          if (bp) {
+            Object.assign(bp, blueprint)
             continue
           }
         } else {
           blueprint.id = utils.guid()
-          newBps.push(blueprint)
         }
+        newBps.push(blueprint)
       }
       newBps.length && state.blueprints.push(...newBps)
+      saveBlueprints(state.blueprints)
+    },
+    editBlueprint (state, {id, form}) {
+      console.log('editBlueprint arguments', id, form)
+      const blueprint = state.blueprints.find(b => b.id === id)
+      if (!blueprint) {
+        console.warn('can not find blueprint with index', id)
+        return
+      }
+      Object.assign(blueprint.form, form)
+      console.log('editBlueprint', blueprint, state.blueprints)
       saveBlueprints(state.blueprints)
     },
     set2iphoneX (state) {

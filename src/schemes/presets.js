@@ -17,6 +17,7 @@ const presets = [
     title: '🍛 吃什么',
     type: 'options',
     form: {
+      allowDuplicated: false,
       choosedCount: 1,
       options: [
         '湘菜',
@@ -33,6 +34,7 @@ const presets = [
     title: '🏖 周末玩什么',
     type: 'options',
     form: {
+      allowDuplicated: false,
       choosedCount: 1,
       options: [
         '爬山',
@@ -48,6 +50,7 @@ const presets = [
     title: '🎲 掷骰子',
     type: 'options',
     form: {
+      allowDuplicated: false,
       choosedCount: 1,
       options: [
         '⚀',
@@ -64,6 +67,7 @@ const presets = [
     title: '✌️ 划拳',
     type: 'options',
     form: {
+      allowDuplicated: false,
       choosedCount: 1,
       options: [
         '✌️',
@@ -77,6 +81,7 @@ const presets = [
     title: '🥇 抛硬币',
     type: 'options',
     form: {
+      allowDuplicated: false,
       choosedCount: 1,
       options: [
         '正面',
@@ -97,6 +102,7 @@ const presets = [
     title: '💯 选个幸运数',
     type: 'number',
     form: {
+      allowDuplicated: false,
       choosedCount: 1,
       min: 1,
       max: 100
@@ -105,7 +111,7 @@ const presets = [
 ]
 
 export default function () {
-  const ver = '0.4'
+  const ver = '0.7'
   const installedVer = wx.getStorageSync('presets-installed')
   if (installedVer === ver) {
     console.log('presets installed already')

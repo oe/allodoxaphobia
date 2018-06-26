@@ -60,7 +60,8 @@
         mode="multiSelector"
         @change="onAdjustChange"
         @columnchange="onColumnchange"
-        :value="ajdustVals"
+        @cancel="onAdjustCancel"
+        :value="adjustIdxs"
         :range="adjustRange">
         <div class="icon icon-adjust"></div>
         微调
@@ -100,7 +101,9 @@ export default {
       error: '',
       result: null,
       lastShakeTime: 0,
-      ajdustVals: [0, 0]
+      adjustIdxs: [0],
+      oldAdjustIdxs: [0],
+      adjustRange: [['其他请编辑']]
     }
   },
   // components,
@@ -119,6 +122,7 @@ export default {
     console.log('quryid', query)
     this.switch2(query.id)
     this.updatePage()
+    this.getAdjustList()
   },
   computed: {
     ...mapState(['blueprint']),
@@ -129,26 +133,29 @@ export default {
     blueprintDesc () {
       if (!this.scheme || !this.scheme.getSchemeDesc) return ''
       return this.scheme.getSchemeDesc(this.blueprint.form, this.blueprint)
-    },
-    adjustRange () {
-      let ranges = []
-      if (this.scheme && this.blueprint) {
-        if (this.scheme.getAdjustList) {
-          ranges = this.scheme.getAdjustList(this.blueprint.form)
-        } else {
-          ranges = this.getAdjustList()
-        }
-      }
-      ranges.push(['其他请编辑'])
-      return ranges
     }
   },
   methods: {
-    ...mapMutations(['switch2']),
+    ...mapMutations(['switch2', 'editBlueprint']),
     updatePage () {
       if (!this.blueprint) return
       this.getResult()
       wx.onAccelerometerChange(this.shake)
+    },
+    getAdjustList () {
+      let result
+      if (!this.scheme || !this.blueprint) return []
+      if (this.scheme.getAdjustList) {
+        result = this.scheme.getAdjustList(this.blueprint.form)
+      } else {
+        result = this.getDefaultAdjustList()
+        console.log('range result', result)
+      }
+      result.ranges.push(['其他请编辑'])
+      result.indexs.push(0)
+      this.adjustRange = result.ranges
+      this.adjustIdxs = result.indexs
+      this.oldAdjustIdxs = result.indexs
     },
     onEditBlueprint () {
       const id = this.blueprint.id
@@ -157,9 +164,38 @@ export default {
     },
     onAdjustChange (e) {
       console.log('on change', e, e.target.value)
+      this.adjustIdxs = e.mp.detail.value.map(v => v || 0)
+      // no change
+      if (this.adjustIdxs.join(',') === this.oldAdjustIdxs.join(',')) {
+        wx.showToast({
+          title: '配置未修改',
+          mask: true,
+          icon: 'none'
+        })
+        return
+      }
+      if (this.scheme.adjustChange) {
+        this.scheme.adjustChange(e.mp.detail, this)
+      } else {
+        this.adjustChange(e.mp.detail, this)
+      }
+      wx.showToast({
+        title: '配置已保存, 即将重新获取结果',
+        mask: true,
+        icon: 'none'
+      })
+      this.getResult()
+    },
+    onAdjustCancel () {
+      this.getAdjustList()
     },
     onColumnchange (e) {
-
+      console.log('onColumnchange', e.detail, e)
+      if (this.scheme.columnChange) {
+        this.scheme.columnChange(e.mp.detail, this)
+      } else {
+        this.columnChange(e.mp.detail, this)
+      }
     },
     onOnemore () {
       if (this.status === 'pending') return
