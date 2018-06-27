@@ -120,14 +120,11 @@ export default {
     return distanceRangs.options
   },
   columnChange () {},
-  adjustChange (detail, vm) {
+  getAdjustedForm (detail, vm) {
     const idx = detail.value[0]
     const distanceRangs = this.getDistanceRanges()
-    vm.editBlueprint({
-      id: vm.blueprint.id,
-      form: {
-        distanceRang: distanceRangs[idx]
-      }
-    })
+    return {
+      distanceRang: distanceRangs[idx]
+    }
   }
 }

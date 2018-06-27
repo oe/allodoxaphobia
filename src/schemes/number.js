@@ -47,5 +47,25 @@ export default {
     desc += form.allowDuplicated ? '重复的' : '不重复的'
     desc += `${form.choosedCount}个数字`
     return desc
+  },
+  getAdjustList (form, vm) {
+    form = this.preprocessForm(form)
+    let start = form.min - 15
+    const range1 = Array.apply(null, Array(30)).map((v, k) => start + k)
+    const idx1 = range1.indexOf(form.min)
+
+    start = form.max - 15
+    const range2 = Array.apply(null, Array(30)).map((v, k) => start + k)
+    const idx2 = range1.indexOf(form.max)
+    return {ranges: [ range1, range2 ], indexs: [ idx1, idx2 ]}
+  },
+  columnChange () {},
+  getAdjustedForm (detail, vm) {
+    const ranges = vm.adjustRange
+    let min = ranges[0][detail.value[0]]
+    let max = ranges[1][detail.value[1]]
+    const form = {min, max}
+    this.validateForm(form)
+    return form
   }
 }

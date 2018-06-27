@@ -155,7 +155,7 @@ export default {
       result.indexs.push(0)
       this.adjustRange = result.ranges
       this.adjustIdxs = result.indexs
-      this.oldAdjustIdxs = result.indexs
+      this.oldAdjustIdxs = result.indexs.slice(0)
     },
     onEditBlueprint () {
       const id = this.blueprint.id
@@ -174,27 +174,46 @@ export default {
         })
         return
       }
-      if (this.scheme.adjustChange) {
-        this.scheme.adjustChange(e.mp.detail, this)
-      } else {
-        this.adjustChange(e.mp.detail, this)
+      let form
+      try {
+        if (this.scheme.adjustChange) {
+          form = this.scheme.getAdjustedForm(e.mp.detail, this)
+        } else {
+          form = this.getAdjustedForm(e.mp.detail, this)
+        }
+      } catch (e) {
+        wx.showToast({
+          title: `配置保存失败, ${e.message}`,
+          mask: true,
+          icon: 'none'
+        })
+        return
       }
+      // save change
+      this.editBlueprint({
+        id: this.blueprint.id,
+        form
+      })
+      this.$nextTick(() => this.getAdjustList())
       wx.showToast({
         title: '配置已保存, 即将重新获取结果',
         mask: true,
         icon: 'none'
       })
+      this.oldAdjustIdxs = this.adjustIdxs.slice(0)
       this.getResult()
     },
     onAdjustCancel () {
       this.getAdjustList()
     },
     onColumnchange (e) {
+      const detail = e.mp.detail
+      this.adjustIdxs[detail.column] = detail.value
       console.log('onColumnchange', e.detail, e)
       if (this.scheme.columnChange) {
-        this.scheme.columnChange(e.mp.detail, this)
+        this.scheme.columnChange(detail, this)
       } else {
-        this.columnChange(e.mp.detail, this)
+        this.columnChange(detail, this)
       }
     },
     onOnemore () {

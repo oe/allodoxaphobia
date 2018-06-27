@@ -19,9 +19,11 @@ export default {
       }
     },
     getSecondList (allowDuplicated) {
+      const isSame = allowDuplicated === this.blueprint.form.allowDuplicated
       let cc = this.blueprint.form.choosedCount
       let limit = Infinity
       if (!allowDuplicated) {
+        if (!isSame) cc = 1
         let form = this.blueprint.form
         if (this.scheme.preprocessForm) form = this.scheme.preprocessForm(form)
         limit = this.scheme.getOptionCount(form)
@@ -35,7 +37,7 @@ export default {
       console.log('get range', allowDuplicated, ccRange)
       return ccRange
     },
-    adjustChange (detail) {
+    getAdjustedForm (detail) {
       const form = this.blueprint.form
       console.log('on change detail', detail)
       const allowDuplicated = this.adjustIdxs[0] === 1
@@ -44,19 +46,14 @@ export default {
         count = +RegExp.$1
       }
       console.log('adjustChange', allowDuplicated, count)
-      // has change
-      this.editBlueprint({
-        id: this.blueprint.id,
-        form: {
-          allowDuplicated,
-          choosedCount: count
-        }
-      })
+      return {
+        allowDuplicated,
+        choosedCount: count
+      }
     },
     columnChange (detail, vm) {
       console.log('this.detail', detail)
       if (detail.column !== 0) return
-      this.adjustIdxs[detail.column] = detail.value
       this.adjustRange[1].splice(0,
         this.adjustRange[1].length,
         ...this.getSecondList(detail.value === 1))
