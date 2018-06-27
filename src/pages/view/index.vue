@@ -97,6 +97,7 @@ export default {
   mixins: [pmixin, schemeMixin],
   data () {
     return {
+      isBlueprintChanged: false,
       status: 'pending',
       error: '',
       result: null,
@@ -119,10 +120,10 @@ export default {
   },
   mounted () {
     const query = this.$root.$mp.query
-    console.log('quryid', query)
+    console.log('view page scheme id', query)
+    wx.onAccelerometerChange(this.shake)
     this.switch2(query.id)
     this.updatePage()
-    this.getAdjustList()
   },
   computed: {
     ...mapState(['blueprint']),
@@ -135,12 +136,27 @@ export default {
       return this.scheme.getSchemeDesc(this.blueprint.form, this.blueprint)
     }
   },
+  onShow () {
+    console.log('view page shown', this.isBlueprintChanged)
+    if (this.isBlueprintChanged && this.blueprint) {
+      wx.showToast({
+        icon: 'none',
+        title: '正在重新获取结果...',
+        duration: 500
+      })
+      this.$nextTick(() => this.updatePage())
+    }
+  },
+  onUnload () {
+    wx.stopAccelerometer()
+  },
   methods: {
     ...mapMutations(['switch2', 'editBlueprint']),
     updatePage () {
       if (!this.blueprint) return
+      console.log('update page')
+      this.getAdjustList()
       this.getResult()
-      wx.onAccelerometerChange(this.shake)
     },
     getAdjustList () {
       let result
@@ -149,7 +165,6 @@ export default {
         result = this.scheme.getAdjustList(this.blueprint.form)
       } else {
         result = this.getDefaultAdjustList()
-        console.log('range result', result)
       }
       result.ranges.push(['其他请编辑'])
       result.indexs.push(0)
@@ -221,6 +236,8 @@ export default {
       this.getResult()
     },
     async getResult () {
+      this.isBlueprintChanged = false
+      console.warn('get result;')
       try {
         this.status = 'pending'
         let result = await schemes.getResult(this.blueprint)
@@ -259,6 +276,15 @@ export default {
         wx.vibrateLong()
       }
       this.lastShakeTime = nowTime // 记录本次摇动时间，为下次计算摇动时间做准备
+    }
+  },
+  watch: {
+    blueprint: {
+      deep: true,
+      handler (nv, old) {
+        console.warn('view page blueprint changed', nv, old)
+        old && (this.isBlueprintChanged = true)
+      }
     }
   }
 }

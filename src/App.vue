@@ -31,13 +31,14 @@ export default {
 
 $bar-height: 50px;
 $iphonex-bottom: 34px;
+$center-btn-size: 60px;
 
 .page-main {
-  padding-bottom: $bar-height;
+  padding-bottom: $bar-height + $center-btn-size / 2;
   overflow-y: auto;
 
   .is-iphonex & {
-    padding-bottom: $bar-height + $iphonex-bottom;
+    padding-bottom: $bar-height + $iphonex-bottom + $center-btn-size / 2;
   }
 }
 
@@ -71,7 +72,7 @@ $iphonex-bottom: 34px;
     }
 
     .icon {
-      font-size: 30px;
+      font-size: 28px;
     }
   }
 
@@ -83,16 +84,16 @@ $iphonex-bottom: 34px;
   .btn-center {
     position: relative;
     color: #666;
-    top: -30px;
-    width: 60px;
-    height: 60px;
+    top: -$center-btn-size / 2;
+    width: $center-btn-size;
+    height: $center-btn-size;
     border-radius: 50%;
     border: none;
     margin-left:auto;
     margin-right:auto;
 
     &.icon {
-      line-height: 60px;
+      line-height: $center-btn-size;
       font-size: 30px;
       &:before {
         display: block;

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import pmixin from '../pmixin'
 export default {
   mixins: [pmixin],
@@ -36,9 +36,11 @@ export default {
     ...mapState(['blueprints'])
   },
   onShow () {
+    this.clearBlueprint()
     wx.stopAccelerometer()
   },
   methods: {
+    ...mapMutations(['clearBlueprint']),
     viewOption (id) {
       wx.navigateTo({url: `../view/view?id=${id}`})
     },

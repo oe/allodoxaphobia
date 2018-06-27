@@ -2,7 +2,7 @@ import store from '@/utils/store'
 // 预制方案定义
 const presets = [
   {
-    id: 'allodoxaphobia-wherefood',
+    id: 'allodoxaphobia-where-food',
     title: '📌 去哪儿吃饭',
     type: 'location',
     form: {
@@ -13,7 +13,7 @@ const presets = [
     }
   },
   {
-    id: 'allodoxaphobia-eatfood',
+    id: 'allodoxaphobia-eat-what',
     title: '🍛 吃什么',
     type: 'options',
     form: {
@@ -98,7 +98,7 @@ const presets = [
   //   }
   // },
   {
-    id: 'allodoxaphobia-getnumber',
+    id: 'allodoxaphobia-get-number',
     title: '💯 选个幸运数',
     type: 'number',
     form: {
@@ -107,11 +107,62 @@ const presets = [
       min: 1,
       max: 100
     }
+  },
+  {
+    id: 'allodoxaphobia-getnumber',
+    title: '🔤 选个幸运字母',
+    type: 'a2z',
+    form: {
+      allowDuplicated: false,
+      choosedCount: 1
+    }
+  },
+  {
+    id: 'allodoxaphobia-duty-order',
+    title: '💼 周末值班顺序',
+    type: 'options',
+    form: {
+      allowDuplicated: false,
+      choosedCount: 10,
+      options: [
+        '刘一',
+        '陈二',
+        '张三',
+        '李四',
+        '王五',
+        '赵六',
+        '孙七',
+        '周八',
+        '吴九',
+        '郑十'
+      ].join('\n')
+    }
+  },
+  {
+    id: 'allodoxaphobia-pick-prize-winner',
+    title: '🎁 年会特等奖选手抽取',
+    type: 'options',
+    form: {
+      allowDuplicated: false,
+      choosedCount: 1,
+      options: [
+        '刘一',
+        '陈二',
+        '张三',
+        '李四',
+        '王五',
+        '赵六',
+        '孙七',
+        '周八',
+        '吴九',
+        '郑十'
+      ].join('\n')
+    }
   }
 ]
 
 export default function () {
-  const ver = '0.7'
+  const ver = '0.8'
   const installedVer = wx.getStorageSync('presets-installed')
   if (installedVer === ver) {
     console.log('presets installed already')

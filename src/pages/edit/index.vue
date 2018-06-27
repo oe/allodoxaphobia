@@ -102,12 +102,10 @@ export default {
     this.resetForm()
     const query = this.$root.$mp.query
     this.switch2(query.id)
-    console.log('edit page mounted')
     this.$nextTick(() => {
-      console.log('edit page blueprint', this.blueprint)
       wx.setNavigationBarTitle({title: this.blueprint ? '修改方案' : '新增方案'})
       if (this.blueprint) {
-        console.log('edit page onmounted', this.blueprint)
+        console.log('edit page mounted', this.blueprint)
         this.title = this.blueprint.title
         this.typeIdx = allTypes.findIndex(t => t.value === this.blueprint.type)
 
@@ -131,12 +129,10 @@ export default {
       return allTypes.map(t => t.label)
     },
     schemeType () {
-      console.log('this.typeIdx', this.typeIdx)
       const t = allTypes[this.typeIdx]
       return t && t.value
     },
     scheme () {
-      console.log('scheme this.schemeType', this.schemeType)
       return schemes.getScheme(this.schemeType)
     }
   },
@@ -146,7 +142,7 @@ export default {
       wx.scanCode({
         onlyFromCamera: false,
         success: (res) => {
-          console.log('扫码内容', res)
+          console.log('scanned content', res)
           if (key in this.form) this.form[key] = res.result
         },
         fail (e) {
@@ -156,7 +152,6 @@ export default {
     },
     async onSave () {
       let form = Object.assign({}, this.form)
-      console.warn('form', form)
       form.allowDuplicated = form.allowDuplicated === '1'
       // 将下拉选框的 index 转换为对应的值
       if (this.scheme.form) {
@@ -176,6 +171,8 @@ export default {
           type: this.schemeType
         }
         if (this.blueprint) blueprint.id = this.blueprint.id
+        // 判断scheme 是否变化
+        this.hasSchemeChanged(blueprint)
         this.addBlueprints(blueprint)
         const title = this.blueprint ? '方案修改成功' : '方案添加成功'
         wx.showToast({
@@ -197,7 +194,7 @@ export default {
         if (e.isConfirm) return
         console.log(e)
         wx.showModal({
-          title: '保存选项失败',
+          title: '保存方案失败',
           content: e.message,
           showCancel: false
         })
@@ -260,6 +257,14 @@ export default {
           throw new Error(`请填写 ${title}`)
         }
       })
+    },
+    hasSchemeChanged (newBlueprint) {
+      if (!this.blueprint) return
+      const oldBlueprint = this.blueprint
+      console.log('hasSchemeChanged', oldBlueprint, newBlueprint)
+      if (utils.deepEqual(oldBlueprint, newBlueprint)) {
+        throw new Error('方案配置未变化')
+      }
     },
     resetForm () {
       this.title = ''

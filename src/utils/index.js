@@ -181,7 +181,29 @@ function copy (str, tip) {
   })
 }
 
+// 深度比较对象是否相等
+function deepEqual (o1, o2) {
+  const t1 = typeof o1
+  const t2 = typeof o2
+  if (t1 !== t2) return false
+  if (t1 === 'object') {
+    if (!o1 || !o2) {
+      if (o1 !== o2) return false
+    } else {
+      const ks = Object.keys(o1)
+      for (let i = 0; i < ks.length; i++) {
+        const k = ks[i]
+        if (!deepEqual(o1[k], o2[k])) return false
+      }
+    }
+  } else {
+    if (o1 !== o2) return false
+  }
+  return true
+}
+
 export default {
+  deepEqual,
   copy,
   formatDistance,
   confirm,
