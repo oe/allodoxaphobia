@@ -4,17 +4,17 @@
     <h4 class="title">{{item.name}}</h4>
     <div class="desc">{{item.address}}</div>
     <div class="spec">
-      <span v-if="detail.rating">{{detail.rating}}</span>
-      <span v-if="detail.commentNum">{{detail.commentNum}}</span>
-      <span v-if="detail.price">{{detail.price}}</span>
+      <rater extCls="itm" v-if="detail.rating" :value="detail.rating" fontSize="14"></rater>
+      <span class="itm" v-if="detail.commentNum">{{detail.commentNum}}</span>
+      <span class="itm" v-if="detail.price">{{detail.price}}</span>
     </div>
     <div class="spec">
-      <span v-if="detail.distance">{{detail.distance}}</span>
-      <span v-if="detail.tags" :key="i" v-for="(tag, i) in detail.tags">{{tag}}</span>
+      <span class="itm" v-if="detail.distance">{{detail.distance}}</span>
+      <span class="itm" v-if="detail.tags" :key="i" v-for="(tag, i) in detail.tags">{{tag}}</span>
     </div>
   </div>
   <div v-if="item.telephone" class="act-btn" @tap="onMakeCalls(item.telephone)">☎️ 拨打电话</div>
-  <div class="act-btn" @tap="onShowDetails(item.uid)">查看位置详情</div>
+  <div class="act-btn" @tap="onShowDetails(item.uid)">查看百度提供的位置详情</div>
   <div class="act-btn primary" @tap="openLocation">导航到该位置</div>
 </div>
 </template>
@@ -23,8 +23,10 @@
 import mixin from './mixin'
 import utils from '@/utils'
 import { mapState } from 'vuex'
+import Rater from '@/components/rater'
 export default {
   mixins: [mixin],
+  components: { Rater },
   computed: {
     ...mapState(['blueprint']),
     detail () {
@@ -37,12 +39,13 @@ export default {
       if (detail.price) {
         desc.price = `人均${detail.price}元`
       }
-      if (detail.rating) {
-        desc.rating = `评分${detail.overall_rating}(共5分)`
+      if (detail.overall_rating) {
+        desc.rating = parseFloat(detail.overall_rating)
       }
-      if (detail.commentNum) {
+      if (detail.comment_num) {
         desc.commentNum = `${detail.comment_num}条评论`
       }
+      console.warn('computed detail', desc)
       return desc
     }
   },
@@ -84,6 +87,11 @@ export default {
         type: this.blueprint.type,
         result: id
       }
+      const qs = Object.keys(args).map(k => {
+        return `${encodeURIComponent(k)}=${encodeURIComponent(args[k])}`
+      }).join('&')
+      const url = `../shared-view/shared-view?${qs}`
+      wx.navigateTo({url})
     },
     openBaidu () {
       let url = this.detail.detail_url
@@ -108,10 +116,10 @@ export default {
   font-size: 14px;
   .title { font-size: 24px; color: #333; }
   .desc {font-size: 16px; color: #444; }
-  .spec span {
+  .spec .itm {
     padding-right: 5px;
 
-    + span {
+    + .itm {
       padding-left: 5px;
     }
   }

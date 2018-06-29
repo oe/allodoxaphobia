@@ -98,11 +98,16 @@ export default {
       if (item.detail_info && item.detail_info.distance) {
         str += '距离: ' + utils.formatDistance(item.detail_info.distance)
       }
+      if (item.detail_info.overall_rating) str += ' / 评分: ' + item.detail_info.overall_rating
+      if (item.detail_info.comment_num) str += ' / 评论数: ' + item.detail_info.comment_num
       if (item.telephone) str += ' / 电话: ' + item.telephone
-      if (item.detail_info && item.detail_info.price) {
-        str += ' / 价格: ' + item.detail_info.price
+      if (item.detail_info.price) {
+        str += ' / 价格: ¥' + item.detail_info.price
       }
       ls.push(str)
+      if (item.detail_info.tag) {
+        ls.push('地图标签: ' + item.detail_info.tag)
+      }
       if (item.detail_info && item.detail_info.detail_url) {
         ls.push('百度详情: ' + item.detail_info.detail_url)
       }

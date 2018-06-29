@@ -1,23 +1,36 @@
 <template>
 <div class="help-page">
-  <img src="./wechat.jpg">
+
 </div>
 </template>
 
 <script>
+import LZString from 'lz-string'
 
 export default {
   data () {
     return {
-      url: ''
+      pageArgs: {}
     }
   },
-  onLoad (options) {
+  mounted () {
     const query = this.$root.$mp.query
-    console.warn(query)
-    const url = decodeURIComponent(query.url)
-    console.warn(url)
-    this.url = url.replace(/^http:/, 'https:')
+    let pageArgs
+    if (query.lzs) {
+      pageArgs = LZString.decompressFromEncodedURIComponent(query.pageArgs)
+    } else {
+      pageArgs = Object.keys(query).reduce((acc, k) => {
+        acc[k] = decodeURIComponent(query[k])
+        return acc
+      }, {})
+    }
+    console.warn('page detail', pageArgs)
+    this.pageArgs = pageArgs
+  },
+  methods: {
+    getLocationDetail (url) {
+
+    }
   }
 }
 </script>
