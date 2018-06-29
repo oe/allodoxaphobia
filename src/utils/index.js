@@ -35,7 +35,6 @@ function request (options) {
 //  }
 // 使用百度地图接口请求周边位置数据
 async function getNearbyLocations (data, options = {}) {
-  console.log(data, options)
   const defaultOptions = {
     radius: '1000', // 检索距离半径 m
     radius_limit: false, // 严格按半径检索

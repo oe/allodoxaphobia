@@ -74,7 +74,7 @@
       <div class="icon icon-edit"></div>
       编辑
     </div>
-    <div class="toolbar-item">
+    <div class="toolbar-item" @tap="gotoHelp">
       <div class="icon icon-feedback"></div>
       反馈
     </div>
@@ -136,6 +136,12 @@ export default {
       return this.scheme.getSchemeDesc(this.blueprint.form, this.blueprint)
     }
   },
+  onShareAppMessage () {
+    return {
+      title: '关爱选择困难症',
+      path: '/pages/view/view?id=' + this.blueprint.id
+    }
+  },
   onShow () {
     console.log('view page shown', this.isBlueprintChanged)
     if (this.isBlueprintChanged && this.blueprint) {
@@ -171,11 +177,6 @@ export default {
       this.adjustRange = result.ranges
       this.adjustIdxs = result.indexs
       this.oldAdjustIdxs = result.indexs.slice(0)
-    },
-    onEditBlueprint () {
-      const id = this.blueprint.id
-      console.log('going to edit of id', id)
-      wx.navigateTo({url: `../edit/edit?id=${id}`})
     },
     onAdjustChange (e) {
       console.log('on change', e, e.target.value)
@@ -256,6 +257,14 @@ export default {
           this.error = e.message
         }
       }
+    },
+    onEditBlueprint () {
+      const id = this.blueprint.id
+      console.log('going to edit of id', id)
+      wx.navigateTo({url: `../edit/edit?id=${id}`})
+    },
+    gotoHelp () {
+      wx.navigateTo({url: `../help/help`})
     },
     // 复制结果
     copyResult () {

@@ -6,6 +6,6 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '网页详情'
+    navigationBarTitleText: '帮助反馈'
   }
 }

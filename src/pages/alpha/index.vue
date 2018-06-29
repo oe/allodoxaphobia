@@ -1,12 +1,23 @@
 <template>
   <div class="app-main" :class="isIphoneX ? 'is-iphonex' : ''">
     <div class="page-main">
-      <div
-        class="blueprint-item"
-        v-for="bp in blueprints"
-        :key="bp.id"
-        @tap="viewOption(bp.id)">
-        {{bp.title}}
+      <scroll-view
+        v-if="blueprints && blueprints.length"
+        class="blueprint-list">
+        <movable-area>
+          <movable-view>
+          </movable-view>
+        </movable-area>
+        <div
+          class="blueprint-item"
+          v-for="bp in blueprints"
+          :key="bp.id"
+          @tap="viewOption(bp.id)">
+          {{bp.title}}
+        </div>
+      </scroll-view>
+      <div class="no-blueprints" v-else>
+        😢 木有任何可用方案, 请点击下方的 + 新建
       </div>
     </div>
     <div class="toolbar">
@@ -32,6 +43,11 @@ import { mapState, mapMutations } from 'vuex'
 import pmixin from '../pmixin'
 export default {
   mixins: [pmixin],
+  data () {
+    return {
+      canScroll: true
+    }
+  },
   computed: {
     ...mapState(['blueprints'])
   },
@@ -57,15 +73,13 @@ export default {
 
 </script>
 <style lang="scss">
-$bar-height: 50px;
-$iphonex-bottom: 34px;
 .blueprint-list {
-  padding-bottom: $bar-height;
-  overflow-y: auto;
+  // padding-bottom: $bar-height;
+  // overflow-y: auto;
 
-  .is-iphonex & {
-    padding-bottom: $bar-height + $iphonex-bottom;
-  }
+  // .is-iphonex & {
+  //   padding-bottom: $bar-height + $iphonex-bottom;
+  // }
 }
 .blueprint-item {
   color: #666;
