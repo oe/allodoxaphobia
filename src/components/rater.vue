@@ -129,8 +129,8 @@ export default {
   margin: 0;
   padding: 0;
   line-height: normal;
-  // vertical-align: middle;
-  vertical-align:top;
+  vertical-align: middle;
+  // vertical-align:top;
   font-weight: 400;
   font-style: normal;
   @include clearfix;

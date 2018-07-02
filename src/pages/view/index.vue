@@ -48,9 +48,10 @@
     </div>
   </div>
   <NoBlueprint v-else></NoBlueprint>
+  <Actionsheet ref="acs"></Actionsheet>
   <div class="toolbar" v-if="blueprint">
     <div class="toolbar-item-2">
-      <div class="toolbar-item" @tap="copyResult" v-if="!!result">
+      <div class="toolbar-item" @tap="onShare" v-if="!!result">
         <div class="icon icon-copy"></div>
         复制结果
       </div>
@@ -86,6 +87,7 @@
 import { mapState, mapMutations } from 'vuex'
 import schemes from '@/schemes'
 import utils from '@/utils'
+import Actionsheet from '@/components/actionsheet'
 import pmixin from '../pmixin'
 import schemeMixin from './scheme-mixin'
 import NoBlueprint from './no-blueprint'
@@ -104,7 +106,8 @@ export default {
       lastShakeTime: 0,
       adjustIdxs: [0],
       oldAdjustIdxs: [0],
-      adjustRange: [['其他请编辑']]
+      adjustRange: [['其他请编辑']],
+      acs: null
     }
   },
   // components,
@@ -112,13 +115,16 @@ export default {
     NoBlueprint,
     LocationItem,
     OptionsItem,
-    PokerItem
+    PokerItem,
+    Actionsheet
   },
   created () {
     this.status = 'pending'
     this.result = null
   },
   mounted () {
+    const wxQuery = wx.createSelectorQuery()
+    this.acs = wxQuery.select('actionsheet')
     const query = this.$root.$mp.query
     console.log('view page scheme id', query)
     wx.onAccelerometerChange(this.shake)
@@ -265,6 +271,10 @@ export default {
     },
     gotoHelp () {
       wx.navigateTo({url: `../help/help`})
+    },
+    onShare () {
+      console.log('on share', this.acs, this.$refs)
+      this.$refs.acs.showSheet()
     },
     // 复制结果
     copyResult () {

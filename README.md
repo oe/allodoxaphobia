@@ -23,3 +23,5 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 ## 项目参考
 - [mpvue](https://github.com/Meituan-Dianping/mpvue) 使用 vue 开发小程序
 - [icons8](https://icons8.com/) 图标库
+- [wux](https://github.com/wux-weapp/wux-weapp) 小程序组件库
+- [微信小程序左划删除组件](https://github.com/bigmeow/minapp-slider-left)
