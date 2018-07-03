@@ -1,9 +1,9 @@
 /**
  * 字母A~Z
  */
-
+import createScheme from './scheme-base'
 const LETTER_RANGE = 'AZ'
-export default {
+const child = {
   name: '从字母A~Z选择',
   // 校验数据合法性
   validateForm (form) {
@@ -24,3 +24,5 @@ export default {
     return desc
   }
 }
+
+export default createScheme(child)

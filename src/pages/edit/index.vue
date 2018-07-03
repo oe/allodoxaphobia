@@ -275,6 +275,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '~@/style/base.scss';
+
 .edit-page {
   height: 100%;
   background-color: #efefef;
@@ -301,26 +303,8 @@ export default {
     position: relative;
     background-color: white;
 
-    &:before, &:after {
-      content: " ";
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      height: 1px;
-      border-top: 1px solid #e5e5e5;
-      color: #e5e5e5;
-      transform-origin: 0 0;
-      transform: scaleY(0.5);
-      z-index: 2;
-    }
-    &:after {
-      top: unset;
-      bottom: 0;
-      border-top: none;
-      border-bottom: 1px solid #e5e5e5;
-      transform-origin: 0 100%;
-    }
+    @include line-vertical;
+
     textarea {
       height: 200px;
     }

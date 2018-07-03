@@ -1,8 +1,8 @@
 /**
  * 数字范围
  */
-
-export default {
+import createScheme from './scheme-base'
+const child = {
   name: '从数字范围选择',
   // 定义选项内容
   form: [
@@ -51,6 +51,7 @@ export default {
   getAdjustList (form, vm) {
     form = this.preprocessForm(form)
     let start = form.min - 15
+    if (start < 0) start = Math.max(0, start)
     const range1 = Array.apply(null, Array(30)).map((v, k) => start + k)
     const idx1 = range1.indexOf(form.min)
 
@@ -69,3 +70,5 @@ export default {
     return form
   }
 }
+
+export default createScheme(child)

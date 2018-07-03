@@ -53,7 +53,7 @@
     <div class="toolbar-item-2">
       <div class="toolbar-item" @tap="onShare" v-if="!!result">
         <div class="icon icon-copy"></div>
-        复制结果
+        分享结果
       </div>
       <div class="toolbar-item" v-else></div>
       <picker
@@ -88,15 +88,15 @@ import { mapState, mapMutations } from 'vuex'
 import schemes from '@/schemes'
 import utils from '@/utils'
 import Actionsheet from '@/components/actionsheet'
+import LZString from 'lz-string'
 import pmixin from '../pmixin'
-import schemeMixin from './scheme-mixin'
 import NoBlueprint from './no-blueprint'
 import LocationItem from './items/location'
 import OptionsItem from './items/options'
 import PokerItem from './items/poker'
 
 export default {
-  mixins: [pmixin, schemeMixin],
+  mixins: [pmixin],
   data () {
     return {
       isBlueprintChanged: false,
@@ -143,10 +143,14 @@ export default {
     }
   },
   onShareAppMessage () {
-    return {
+    const qs = this.scheme.getShareQs(this.result, this.blueprint)
+    const qsStr = 'lzstr=' + LZString.compressToEncodedURIComponent(JSON.stringify(qs))
+    const shareObj = {
       title: '关爱选择困难症',
-      path: '/pages/view/view?id=' + this.blueprint.id
+      path: '/pages/shared-view/shared-view?' + qsStr
     }
+    console.warn(shareObj)
+    return shareObj
   },
   onShow () {
     console.log('view page shown', this.isBlueprintChanged)
@@ -166,18 +170,13 @@ export default {
     ...mapMutations(['switch2', 'editBlueprint']),
     updatePage () {
       if (!this.blueprint) return
-      console.log('update page')
       this.getAdjustList()
       this.getResult()
     },
     getAdjustList () {
       let result
       if (!this.scheme || !this.blueprint) return []
-      if (this.scheme.getAdjustList) {
-        result = this.scheme.getAdjustList(this.blueprint.form)
-      } else {
-        result = this.getDefaultAdjustList()
-      }
+      result = this.scheme.getAdjustList(this.blueprint.form, this)
       result.ranges.push(['其他请编辑'])
       result.indexs.push(0)
       this.adjustRange = result.ranges
@@ -198,11 +197,7 @@ export default {
       }
       let form
       try {
-        if (this.scheme.adjustChange) {
-          form = this.scheme.getAdjustedForm(e.mp.detail, this)
-        } else {
-          form = this.getAdjustedForm(e.mp.detail, this)
-        }
+        form = this.scheme.adjustChange(e.mp.detail, this)
       } catch (e) {
         wx.showToast({
           title: `配置保存失败, ${e.message}`,
@@ -231,12 +226,7 @@ export default {
     onColumnchange (e) {
       const detail = e.mp.detail
       this.adjustIdxs[detail.column] = detail.value
-      console.log('onColumnchange', e.detail, e)
-      if (this.scheme.columnChange) {
-        this.scheme.columnChange(detail, this)
-      } else {
-        this.columnChange(detail, this)
-      }
+      this.scheme.columnChange(detail, this)
     },
     onOnemore () {
       if (this.status === 'pending') return
@@ -244,7 +234,6 @@ export default {
     },
     async getResult () {
       this.isBlueprintChanged = false
-      console.warn('get result;')
       try {
         this.status = 'pending'
         let result = await schemes.getResult(this.blueprint)
@@ -273,17 +262,27 @@ export default {
       wx.navigateTo({url: `../help/help`})
     },
     onShare () {
-      console.log('on share', this.acs, this.$refs)
-      this.$refs.acs.showSheet()
+      this.$refs.acs.showSheet({
+        onButtonClicked: (idx, item) => {
+          if (item.cmd === 'copy') {
+            this.copyResult()
+          }
+        },
+        buttons: [
+          {
+            text: '分享页面给好友',
+            openType: 'share'
+          },
+          {
+            text: '复制文字结果',
+            cmd: 'copy'
+          }
+        ]
+      })
     },
     // 复制结果
     copyResult () {
-      let str
-      if (this.scheme.getResultDesc) {
-        str = this.scheme.getResultDesc(this.result, this.blueprint)
-      } else {
-        str = this.getResultDesc(this.result, this.blueprint)
-      }
+      let str = this.scheme.getResultDesc(this.result, this.blueprint)
       utils.copy(str, '结果已复制')
     },
     shake (acc) {

@@ -24,7 +24,7 @@ export default {
         return acc
       }, {})
     }
-    console.warn('page detail', pageArgs)
+    console.log('pageArgs', pageArgs)
     this.pageArgs = pageArgs
   },
   methods: {

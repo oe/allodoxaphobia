@@ -1,0 +1,35 @@
+$border-color: #e5e5e5;
+@mixin line-base() {
+  content: " ";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform: scaleY(0.5);
+  z-index: 2;
+}
+
+@mixin line-before () {
+  &::before {
+    @include line-base;
+    top: 0;
+    // transform-origin: 0 0;
+    background-color: $border-color;
+    // border-top: 1px solid $border-color;
+  }
+}
+
+@mixin line-after () {
+  &::after {
+    @include line-base;
+    bottom: 0;
+    background-color: $border-color;
+    // border-bottom: 1px solid $border-color;
+    // transform-origin: 0 100%;
+  }
+}
+
+@mixin line-vertical () {
+  @include line-before;
+  @include line-after;
+}

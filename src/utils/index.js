@@ -201,6 +201,12 @@ function deepEqual (o1, o2) {
   return true
 }
 
+// function toQueryString (obj) {
+//   return Object.keys(obj).map((k) => {
+//     return `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`
+//   }).join('&')
+// }
+
 export default {
   deepEqual,
   copy,
@@ -210,4 +216,5 @@ export default {
   request,
   getLocation,
   getNearbyLocations
+  // toQueryString
 }

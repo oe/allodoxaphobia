@@ -2,8 +2,8 @@
  * 地理位置
  */
 import utils from '@/utils'
-
-export default {
+import createScheme from './scheme-base'
+const child = {
   name: '基于地理位置筛选',
   // 只能选一个
   singleton: true,
@@ -125,7 +125,7 @@ export default {
     return distanceRangs.options
   },
   columnChange () {},
-  getAdjustedForm (detail, vm) {
+  adjustChange (detail, vm) {
     const idx = detail.value[0]
     const distanceRangs = this.getDistanceRanges()
     return {
@@ -133,3 +133,5 @@ export default {
     }
   }
 }
+
+export default createScheme(child)

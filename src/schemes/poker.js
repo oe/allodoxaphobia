@@ -1,14 +1,14 @@
 /**
  * 扑克牌
  */
-
+import createScheme from './scheme-base'
 const SUITE = ['♠️', '♥️', '♣️', '♦️']
 const COLORS = ['black', 'red']
 const SUITE_START = '🂡'
 const SUITE_COUNT = 13
 const JOKER = '🃟'
 
-export default {
+const child = {
   name: '从扑克牌中选择',
   // 校验数据合法性
   validateForm (form) {
@@ -43,3 +43,5 @@ export default {
     return desc
   }
 }
+
+export default createScheme(child)

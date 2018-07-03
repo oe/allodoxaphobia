@@ -5,13 +5,13 @@
     <view class="acs-title" v-if="title">{{title}}</view>
     <view class="acs-group">
       <block v-for="(btn, idx) in buttons" :key="idx">
-        <button class="acs-button" :data-index="idx" @tap="buttonClicked">
+        <button class="acs-button" :open-type="btn.openType" :data-index="idx" @tap="buttonClicked">
           {{ btn.text }}
         </button>
       </block>
     </view>
-    <view class="acs-group " v-if="cancelText">
-      <button class="acs-button cancel" @tap="cancel">{{ cancelText }}</button>
+    <view class="acs-group acs-group-cancel" v-if="cancelText">
+      <button class="acs-button" @tap="cancel">{{ cancelText }}</button>
     </view>
   </view>
 </view>
@@ -19,8 +19,8 @@
 
 <script>
 const defaults = {
-  titleText: 'wwww',
-  buttons: [{text: 'aaaa'}],
+  // titleText: 'wwww',
+  buttons: [],
   onButtonClicked () {},
   cancelText: '取消',
   onCancel () {}
@@ -75,6 +75,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '~@/style/base.scss';
+
 .actionsheet {
   position: fixed;
   top: 0;
@@ -85,7 +87,7 @@ export default {
   z-index: 9999;
 
   .is-iphonex & {
-    .acs {
+    .acs-group-cancel {
       padding-bottom: 34px;
     }
   }
@@ -108,7 +110,39 @@ export default {
     bottom: 0;
     left: 0;
     width: 100%;
+    background-color: #f1f2f3;
+  }
+
+  .acs-button {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    vertical-align: top;
+    text-align: center;
+    text-overflow: ellipsis;
+    width: 100%;
     background-color: #fff;
+    color: #333;
+    font-size: 18px;
+    line-height: 48px;
+
+    &::after {
+      border: none;
+      border-radius: 0;
+    }
+    @include line-vertical;
+  }
+
+  .acs-group {
+
+    & + .acs-group {
+      margin-top: 10px;
+    }
+
+    &.acs-group-cancel {
+      background-color: #fff;
+    }
   }
 
   &.is-show {

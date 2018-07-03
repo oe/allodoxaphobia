@@ -1,7 +1,8 @@
 /**
  * 自定义选项
  */
-export default {
+import createScheme from './scheme-base'
+const child = {
   name: '自定义选项',
   form: [
     {
@@ -54,3 +55,5 @@ export default {
     return desc
   }
 }
+
+export default createScheme(child)
