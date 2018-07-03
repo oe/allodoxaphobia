@@ -1,6 +1,8 @@
 import md5 from 'blueimp-md5'
-const bdMapApi = 'https://api.map.baidu.com/place/v2/search'
+const bdMapSearchApi = 'https://api.map.baidu.com/place/v2/search'
+const bdMapDetailApi = 'https://api.map.baidu.com/place/v2/detail'
 const bdMapSK = 'dCGxoToz0SiyIGsYjunrz83Il1gdM4d6'
+const bdMapAK = 'kjvTGlp5qFHq913s4MCmiO170D4LFBeH'
 const LOCATION_SCOPE = 'scope.userLocation'
 
 // https://mp.weixin.qq.com/debug/wxadoc/dev/api/network-request.html
@@ -45,23 +47,43 @@ async function getNearbyLocations (data, options = {}) {
     ret_coordtype: 'gcj02ll', // 返回的坐标类型
     page_size: 20, // 每页最多多少条
     page_num: 0, // 页码
-    ak: 'kjvTGlp5qFHq913s4MCmiO170D4LFBeH',
+    ak: bdMapAK,
     timestamp: Date.now()
   }
   const requestData = Object.assign({}, defaultOptions, data)
   if (typeof requestData.location === 'object') {
     requestData.location = `${requestData.location.latitude},${requestData.location.longitude}`
   }
-  let rawStr = bdMapApi.split('.com').pop() + '?' + serializeObj(requestData)
+  let rawStr = bdMapSearchApi.split('.com').pop() + '?' + serializeObj(requestData)
   rawStr += bdMapSK
   requestData.sn = md5(fixedEncodeURIComponent(rawStr))
   options.data = requestData
-  options.url = bdMapApi
+  options.url = bdMapSearchApi
   const result = await request(options)
   // console.warn('result', result)
   if (result.data.status !== 0) throw new Error(JSON.stringify(result.data))
 
   return result.data.results
+}
+
+async function getLocationDetail (uid) {
+  const defaultOptions = {
+    output: 'json', // 响应数据类型
+    scope: '2', // 返回的数据详细程度, 2 详细信息
+    ak: bdMapAK,
+    timestamp: Date.now()
+  }
+  const options = {uid}
+  const requestData = Object.assign({}, defaultOptions, options)
+  let rawStr = bdMapDetailApi.split('.com').pop() + '?' + serializeObj(requestData)
+  rawStr += bdMapSK
+  requestData.sn = md5(fixedEncodeURIComponent(rawStr))
+  options.data = requestData
+  options.url = bdMapDetailApi
+  const result = await request(options)
+  // console.warn('result', result)
+  if (result.data.status !== 0) throw new Error(JSON.stringify(result.data))
+  return result.data.result
 }
 
 function serializeObj (obj) {
@@ -201,12 +223,6 @@ function deepEqual (o1, o2) {
   return true
 }
 
-// function toQueryString (obj) {
-//   return Object.keys(obj).map((k) => {
-//     return `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`
-//   }).join('&')
-// }
-
 export default {
   deepEqual,
   copy,
@@ -215,6 +231,6 @@ export default {
   guid,
   request,
   getLocation,
-  getNearbyLocations
-  // toQueryString
+  getNearbyLocations,
+  getLocationDetail
 }

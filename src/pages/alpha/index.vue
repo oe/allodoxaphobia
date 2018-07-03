@@ -64,7 +64,9 @@ export default {
       wx.navigateTo({url: `../edit/edit`})
     },
     onFeedBack () {
-      let url = 'https://mp.weixin.qq.com/s/0-M2wAiqPioay2BLVWoefg'
+      // let url = 'https://mp.weixin.qq.com/s/0-M2wAiqPioay2BLVWoefg'
+      // let url = 'https://mp.weixin.qq.com/s/SNx2108pLi3gf49bDXhcOg'
+      let url = 'https://mp.weixin.qq.com/s/nfWtbQrcR_yCLfZ7h1QDOQ'
       url = `../webview/webview?url=${encodeURIComponent(url)}`
       wx.navigateTo({url})
     }

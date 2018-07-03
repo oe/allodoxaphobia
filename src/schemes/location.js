@@ -131,6 +131,17 @@ const child = {
     return {
       distanceRang: distanceRangs[idx]
     }
+  },
+  getShareQs (result, blueprint) {
+    const first = result[0]
+    const qs = {
+      id: blueprint.id,
+      title: blueprint.title,
+      type: blueprint.type,
+      result: first.uid
+    }
+    console.log('qs', qs)
+    return qs
   }
 }
 

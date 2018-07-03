@@ -72,7 +72,7 @@ const base = {
       id: blueprint.id,
       title: blueprint.title,
       type: blueprint.type,
-      result: result.join('\n')
+      result
     }
     console.log('qs', qs)
     return qs

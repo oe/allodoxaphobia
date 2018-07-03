@@ -7,41 +7,41 @@
       {{error}}
     </div>
     <div v-if="status === 'success'" class="scheme-result">
-      <template v-if="blueprint.type === 'location'">
+      <block v-if="blueprint.type === 'location'">
         <location-item
           v-for="(item, k) in result"
           :key="k"
-          :item="item">
+          :itemDetail="item">
         </location-item>
-      </template>
-      <template v-if="blueprint.type === 'options'">
+      </block>
+      <block v-if="blueprint.type === 'options'">
         <options-item
           v-for="(item, k) in result"
           :key="k"
           :item="item">
         </options-item>
-      </template>
-      <template v-if="blueprint.type === 'number'">
+      </block>
+      <block v-if="blueprint.type === 'number'">
         <options-item
           v-for="(item, k) in result"
           :key="k"
           :item="item">
         </options-item>
-      </template>
-      <template v-if="blueprint.type === 'a2z'">
+      </block>
+      <block v-if="blueprint.type === 'a2z'">
         <options-item
           v-for="(item, k) in result"
           :key="k"
           :item="item">
         </options-item>
-      </template>
-      <template v-if="blueprint.type === 'poker'">
+      </block>
+      <block v-if="blueprint.type === 'poker'">
         <poker-item
           v-for="(item, k) in result"
           :key="k"
           :item="item">
         </poker-item>
-      </template>
+      </block>
     </div>
     <div v-if="status === 'pending'" class="scheme-pending">
       loading...
@@ -259,6 +259,13 @@ export default {
       wx.navigateTo({url: `../edit/edit?id=${id}`})
     },
     gotoHelp () {
+      // const qs = this.scheme.getShareQs(this.result, this.blueprint)
+      // const qsStr = 'lzstr=' + LZString.compressToEncodedURIComponent(JSON.stringify(qs))
+      // const shareObj = {
+      //   title: '关爱选择困难症',
+      //   path: '/pages/shared-view/shared-view?' + qsStr
+      // }
+      // wx.navigateTo({url: shareObj.path})
       wx.navigateTo({url: `../help/help`})
     },
     onShare () {
