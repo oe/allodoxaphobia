@@ -19,23 +19,12 @@
 </template>
 
 <script>
+import mixin from './mixin'
 import utils from '@/utils'
 import Rater from '@/components/rater'
 export default {
   components: { Rater },
-  props: ['itemDetail'],
-  data () {
-    return {
-      item: null
-    }
-  },
-  async created () {
-    if (typeof this.itemDetail === 'string') {
-      this.item = await utils.getLocationDetail(this.itemDetail)
-    } else {
-      this.item = Object.assign({}, this.itemDetail)
-    }
-  },
+  mixins: [mixin],
   computed: {
     detail () {
       const detail = (this.item && this.item.detail_info) || {}

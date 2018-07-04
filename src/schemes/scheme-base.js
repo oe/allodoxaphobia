@@ -63,8 +63,8 @@ const base = {
       ...vm.getSecondList(detail.value === 1))
   },
   // get result words desc for copy
-  getResultDesc (result, blueprint) {
-    return blueprint.title + '\n' + result.join('\n')
+  getResultDesc (result, title) {
+    return title + '\n' + result.join('\n')
   },
   // get share query string object
   getShareQs (result, blueprint) {

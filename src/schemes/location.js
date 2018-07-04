@@ -87,8 +87,8 @@ const child = {
     const desc = `从方圆${form.distanceRang}中选出${form.tag}类别中包含关键字${form.query}的位置`
     return desc
   },
-  getResultDesc (result, blueprint) {
-    let str = blueprint.title + '\n'
+  getResultDesc (result, title) {
+    let str = title + '\n'
     return str + result.map((item) => {
       let ls = [
         item.name,
@@ -104,7 +104,7 @@ const child = {
       if (item.detail_info.price) {
         str += ' / 价格: ¥' + item.detail_info.price
       }
-      ls.push(str)
+      ls.push(str.replace(/^\s*\/\s*/, ''))
       if (item.detail_info.tag) {
         ls.push('地图标签: ' + item.detail_info.tag)
       }

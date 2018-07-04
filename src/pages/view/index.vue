@@ -11,7 +11,7 @@
         <location-item
           v-for="(item, k) in result"
           :key="k"
-          :itemDetail="item">
+          :item="item">
         </location-item>
       </block>
       <block v-if="blueprint.type === 'options'">
@@ -90,7 +90,7 @@ import utils from '@/utils'
 import Actionsheet from '@/components/actionsheet'
 import LZString from 'lz-string'
 import pmixin from '../pmixin'
-import NoBlueprint from './no-blueprint'
+import NoBlueprint from './items/no-blueprint'
 import LocationItem from './items/location'
 import OptionsItem from './items/options'
 import PokerItem from './items/poker'
@@ -106,8 +106,7 @@ export default {
       lastShakeTime: 0,
       adjustIdxs: [0],
       oldAdjustIdxs: [0],
-      adjustRange: [['其他请编辑']],
-      acs: null
+      adjustRange: [['其他请编辑']]
     }
   },
   // components,
@@ -123,8 +122,6 @@ export default {
     this.result = null
   },
   mounted () {
-    const wxQuery = wx.createSelectorQuery()
-    this.acs = wxQuery.select('actionsheet')
     const query = this.$root.$mp.query
     console.log('view page scheme id', query)
     wx.onAccelerometerChange(this.shake)
@@ -289,7 +286,7 @@ export default {
     },
     // 复制结果
     copyResult () {
-      let str = this.scheme.getResultDesc(this.result, this.blueprint)
+      let str = this.scheme.getResultDesc(this.result, this.blueprint.title)
       utils.copy(str, '结果已复制')
     },
     shake (acc) {

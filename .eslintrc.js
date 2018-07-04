@@ -27,6 +27,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
   },
   globals: {
+    getCurrentPages: true,
     App: true,
     Page: true,
     wx: true,
