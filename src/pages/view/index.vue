@@ -52,7 +52,7 @@
   <div class="toolbar" v-if="blueprint">
     <div class="toolbar-item-2">
       <div class="toolbar-item" @tap="onShare" v-if="!!result">
-        <div class="icon icon-copy"></div>
+        <div class="icon icon-share"></div>
         分享结果
       </div>
       <div class="toolbar-item" v-else></div>
@@ -69,7 +69,7 @@
       </picker>
     </div>
     <div class="toolbar-item">
-      <div class="btn-center icon icon-gift" @tap="onOnemore"></div>
+      <div class="btn-center icon icon-shuffle" @tap="onOnemore"></div>
     </div>
     <div class="toolbar-item" @tap="onEditBlueprint">
       <div class="icon icon-edit"></div>

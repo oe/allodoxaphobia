@@ -71,7 +71,7 @@
       </div>
     </div>
     <div class="toolbar-item" @tap="onSave">
-      <view class="btn-center icon icon-shake"></view>
+      <view class="btn-center icon icon-save"></view>
     </div>
     <div class="toolbar-item">
       <div class="icon icon-feedback"></div>

@@ -9,6 +9,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     isIphoneX: false,
+    windowWidth: 320,
     blueprints: [],
     blueprint: null
   },
@@ -65,8 +66,12 @@ const store = new Vuex.Store({
       console.log('editBlueprint', blueprint, state.blueprints)
       saveBlueprints(state.blueprints)
     },
-    set2iphoneX (state) {
-      state.isIphoneX = true
+    updateDeviceInfo (state, payload) {
+      Object.keys(payload).forEach(k => {
+        if (k in state) {
+          state[k] = payload[k]
+        }
+      })
     }
   },
   actions: {
@@ -75,9 +80,11 @@ const store = new Vuex.Store({
         success: (res) => {
           let modelmes = res.model
           console.log('system info', res)
-          if (modelmes.search('iPhone X') !== -1) {
-            ctx.commit('set2iphoneX')
+          const payload = {
+            isIphoneX: modelmes.search('iPhone X') !== -1,
+            windowWidth: res.windowWidth
           }
+          ctx.commit('updateDeviceInfo', payload)
         },
         fail (e) {
           console.warn('failed to get system info')

@@ -51,12 +51,12 @@
   <div class="toolbar" v-if="blueprint">
     <div class="toolbar-item-2">
       <div class="toolbar-item" @tap="onShare" v-if="!!result">
-        <div class="icon icon-copy"></div>
+        <div class="icon icon-share"></div>
         分享结果
       </div>
     </div>
     <div class="toolbar-item">
-      <div class="btn-center icon icon-gift" @tap="onGohome"></div>
+      <div class="btn-center icon icon-home" @tap="onGohome"></div>
     </div>
     <div class="toolbar-item-2">
       <div class="toolbar-item" @tap="gotoHelp">
