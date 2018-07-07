@@ -49,7 +49,7 @@ async function getResult (schemeConfig) {
   if (!schemeForm.allowDuplicated && schemeForm.choosedCount > optionsCount) {
     let tip = '可用选项不够选'
     if (!optionsCount && schemeConfig.type === 'location') {
-      tip = '附近有点荒凉啊, 没有找到任何相关位置'
+      tip = '附近有点荒凉啊, 没有找到任何相关位置, 你可以尝试调整范围后再试'
     } else {
       console.error('can not get enough options to choose', schemeConfig, 'optionsCount', optionsCount)
     }

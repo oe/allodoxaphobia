@@ -7,7 +7,7 @@ const presets = [
     type: 'location',
     form: {
       choosedCount: 1,
-      tag: '美食',
+      tag: '餐饮',
       query: '美食',
       distanceRang: '1km'
     }
@@ -162,7 +162,7 @@ const presets = [
 ]
 
 export default function () {
-  const ver = '0.8'
+  const ver = '0.9'
   const installedVer = wx.getStorageSync('presets-installed')
   if (installedVer === ver) {
     console.log('presets installed already')

@@ -9,6 +9,7 @@
       <block v-if="blueprint.type === 'location'">
         <location-item
           v-for="(item, k) in result"
+          :isFromShare="true"
           :key="k"
           :item="item">
         </location-item>
@@ -52,7 +53,7 @@
     <div class="toolbar-item-2">
       <div class="toolbar-item" @tap="onShare" v-if="!!result">
         <div class="icon icon-share"></div>
-        分享结果
+        分享
       </div>
     </div>
     <div class="toolbar-item">

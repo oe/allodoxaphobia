@@ -11,7 +11,10 @@ const store = new Vuex.Store({
     isIphoneX: false,
     windowWidth: 320,
     blueprints: [],
-    blueprint: null
+    blueprint: null,
+    locTotal: 0,
+    locReceivedCount: 0,
+    locPageSize: 0
   },
   mutations: {
     init (state) {
@@ -72,6 +75,17 @@ const store = new Vuex.Store({
           state[k] = payload[k]
         }
       })
+    },
+    updateLocResStat (state, payload) {
+      if (payload) {
+        state.locTotal = payload.locTotal
+        state.locPageSize = payload.locPageSize
+        state.locReceivedCount = payload.locReceivedCount
+      } else {
+        state.locTotal = 0
+        state.locReceivedCount = 0
+        state.locPageSize = 0
+      }
     }
   },
   actions: {

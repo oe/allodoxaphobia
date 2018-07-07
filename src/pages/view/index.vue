@@ -53,7 +53,7 @@
     <div class="toolbar-item-2">
       <div class="toolbar-item" @tap="onShare" v-if="!!result">
         <div class="icon icon-share"></div>
-        分享结果
+        分享
       </div>
       <div class="toolbar-item" v-else></div>
       <picker
