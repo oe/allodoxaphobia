@@ -50,13 +50,18 @@ const child = {
       key: 'distanceRang',
       label: '距离范围',
       type: 'select',
-      default: '2',
+      default: '1',
       options: ['500m', '1km', '2km', '3km', '5km', '10km', '20km', '50km', '100km', '200km']
     }
   ],
   async validateForm (form) {
     const opt = this.preprocessForm(form)
+    wx.showLoading({
+      title: '正在校验...',
+      mask: true
+    })
     const len = await this.getOptionCount(opt)
+    wx.hideLoading()
     if (len) return
     await utils.confirm({
       title: '附近无相关位置',
@@ -119,7 +124,7 @@ const child = {
       locPageSize: PAGE_SIZE
     })
     this.locations = result.results
-    return result
+    return result.results
   },
   getAnOption (idx) {
     return this.locations[idx]

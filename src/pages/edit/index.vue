@@ -161,7 +161,7 @@ export default {
         })
       }
 
-      if (this.scheme.purgeForm) form = await this.scheme.purgeForm(form)
+      if (this.scheme.purgeForm) form = this.scheme.purgeForm(form)
       try {
         this.validateCommon()
         if (this.scheme.validateForm) await this.scheme.validateForm(form)
