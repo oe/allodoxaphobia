@@ -14,9 +14,13 @@ export default {
 <style lang="scss">
 .options-item {
   color: #333;
-  padding: 30px 10px;
-  font-size: 100px;
+  padding: 10px 10px;
+  font-size: 50px;
   text-align: center;
+
+  .has-little-result & {
+    font-size: 80px;
+  }
 }
 
 </style>

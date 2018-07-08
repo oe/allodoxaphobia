@@ -55,6 +55,14 @@ export default {
     this.clearBlueprint()
     wx.stopAccelerometer()
   },
+  onShareAppMessage () {
+    const shareObj = {
+      title: '关爱选择困难症',
+      path: '/pages/alpha/alpha'
+    }
+    console.warn('home page', shareObj)
+    return shareObj
+  },
   methods: {
     ...mapMutations(['clearBlueprint']),
     viewOption (id) {

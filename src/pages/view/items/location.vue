@@ -16,7 +16,7 @@
   <div v-if="item.telephone" class="act-btn" @tap="onMakeCalls(item.telephone)">☎️ 拨打电话</div>
   <div class="act-btn primary" @tap="openLocation">导航到该位置</div>
   <div class="location-tip" v-if="!isFromShare && locTotal">{{locTip}}</div>
-  <div class="location-disclaimer">地图数据由百度地图提供, 本程序不保证数据的准确性</div>
+  <div class="location-disclaimer">数据由百度地图提供, 本程序不保证信息的准确性</div>
 </div>
 </template>
 

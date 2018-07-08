@@ -59,8 +59,13 @@ async function getNearbyLocations (data, options = {}) {
   requestData.sn = md5(fixedEncodeURIComponent(rawStr))
   options.data = requestData
   options.url = bdMapSearchApi
-  const result = await request(options)
-  console.warn('result', result)
+  let result
+  try {
+    result = await request(options)
+  } catch (e) {
+    console.warn('network error', e)
+    throw new Error('网络连接异常, 无法查询周边位置数据: ', e.message)
+  }
   if (result.data.status !== 0) throw new Error(JSON.stringify(result.data))
 
   return result.data
@@ -80,7 +85,13 @@ async function getLocationDetail (uid) {
   requestData.sn = md5(fixedEncodeURIComponent(rawStr))
   options.data = requestData
   options.url = bdMapDetailApi
-  const result = await request(options)
+  let result = await request(options)
+  try {
+    result = await request(options)
+  } catch (e) {
+    console.warn('network error', e)
+    throw new Error('网络连接异常, 无法查询置详情信息: ', e.message)
+  }
   // console.warn('result', result)
   if (result.data.status !== 0) throw new Error(JSON.stringify(result.data))
   return result.data.result
@@ -100,7 +111,15 @@ function fixedEncodeURIComponent (str) {
 
 // 获取地理位置
 async function getLocation () {
-  const config = await getSetting()
+  console.log('get location...')
+  let config
+  try {
+    config = await getSetting()
+  } catch (e) {
+    console.warn('can not get settings', e)
+    throw e
+  }
+  console.log('config', config)
   if (!config || !config[LOCATION_SCOPE]) {
     await authorize(LOCATION_SCOPE)
   }

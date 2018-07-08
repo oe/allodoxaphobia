@@ -6,7 +6,7 @@
     <div v-if="status === 'failed'" class="scheme-error">
       {{error}}
     </div>
-    <div v-if="status === 'success'" class="scheme-result">
+    <div v-if="status === 'success'" class="scheme-result" :class="{'has-little-result': hasLittleResult}">
       <block v-if="blueprint.type === 'location'">
         <location-item
           v-for="(item, k) in result"
@@ -44,7 +44,7 @@
       </block>
     </div>
     <div v-if="status === 'pending'" class="scheme-pending">
-      loading...
+      {{loadingTip}}
     </div>
   </div>
   <NoBlueprint v-else></NoBlueprint>
@@ -100,11 +100,14 @@ export default {
   data () {
     return {
       isBlueprintChanged: false,
-      status: 'pending',
+      status: 'idle',
       error: '',
       result: null,
       lastShakeTime: 0,
       adjustIdxs: [0],
+      ltid: 0,
+      // 连续点击获取结果的次数
+      getResTimes: 0,
       oldAdjustIdxs: [0],
       adjustRange: [['其他请编辑']]
     }
@@ -118,7 +121,7 @@ export default {
     Actionsheet
   },
   created () {
-    this.status = 'pending'
+    this.status = 'idle'
     this.result = null
   },
   mounted () {
@@ -137,6 +140,28 @@ export default {
     blueprintDesc () {
       if (!this.scheme || !this.scheme.getSchemeDesc) return ''
       return this.scheme.getSchemeDesc(this.blueprint.form, this.blueprint)
+    },
+    // has only small chars result
+    hasLittleResult () {
+      const result = this.result
+      if (!result || typeof result[0] === 'object') return false
+      if (result.length < 4) {
+        return result.every(itm => String(itm).length <= 4)
+      }
+      return false
+    },
+    loadingTip () {
+      let tip = ''
+      if (this.getResTimes > 25) {
+        tip += '😅'
+      } else if (this.getResTimes > 15) {
+        tip += `点击次数 ${this.getResTimes}, 手机即将爆炸, 倒计时 ${26 - this.getResTimes}`
+      } else if (this.getResTimes > 10) {
+        tip += '亲, 慢些点, 放轻松☕️, 再拼命按手机就要爆炸啦!'
+      } else {
+        tip += `程序正在${this.getResTimes > 1 ? '持续' : ''}思考中🤔...`
+      }
+      return tip
     }
   },
   onShareAppMessage () {
@@ -150,7 +175,6 @@ export default {
     return shareObj
   },
   onShow () {
-    console.log('view page shown', this.isBlueprintChanged)
     if (this.isBlueprintChanged && this.blueprint) {
       wx.showToast({
         icon: 'none',
@@ -226,29 +250,54 @@ export default {
       this.scheme.columnChange(detail, this)
     },
     onOnemore () {
-      if (this.status === 'pending') return
       this.getResult()
     },
     async getResult () {
+      const MIN_TIME_GAP = 500
       this.isBlueprintChanged = false
+
+      const lastTime = Date.now()
+      this.startTime = lastTime
+      this.getResTimes += 1
+      this.stopShowResult()
       try {
         this.status = 'pending'
         let result = await schemes.getResult(this.blueprint)
+        this.stopShowResult()
         if (!Array.isArray(result)) result = [result]
         if (!result.length) {
           throw new Error('😱木有找到任何可用选项, 这可能是个bug')
         }
-        wx.vibrateShort()
-        this.result = result
-        this.status = 'success'
+        const now = Date.now()
+        // console.log('after result done', now, lastTime, now - lastTime)
+        if ((now - lastTime) >= MIN_TIME_GAP) {
+          this.getResTimes = 0
+          wx.vibrateShort()
+          this.result = result
+          this.status = 'success'
+        } else {
+          const gap = MIN_TIME_GAP - (now - lastTime)
+          const tid = setTimeout(() => {
+            this.getResTimes = 0
+            wx.vibrateShort()
+            this.result = result
+            this.status = 'success'
+          }, gap)
+          this.ltid = tid
+        }
       } catch (e) {
+        this.stopShowResult()
+        this.getResTimes = 0
         this.status = 'failed'
         if (e.isLocation) {
           this.error = '获取地理位置失败, 请先授权小程序获取地理位置, 或者授权允许微信获取地理位置'
         } else {
-          this.error = e.message
+          this.error = e.errMsg || e.message
         }
       }
+    },
+    stopShowResult () {
+      clearTimeout(this.ltid)
     },
     onEditBlueprint () {
       const id = this.blueprint.id
@@ -305,7 +354,9 @@ export default {
       deep: true,
       handler (nv, old) {
         console.warn('view page blueprint changed', nv, old)
-        old && (this.isBlueprintChanged = true)
+        if (old) {
+          this.isBlueprintChanged = true
+        }
       }
     }
   }
@@ -331,7 +382,8 @@ export default {
   .scheme-pending {
     color: #888;
     height: 60%;
-    padding: 8px;
+    padding: 10px;
+    font-size: 16px;
     display: flex;//必须有，不然没有效果
     justify-content: center;
     align-items: center;

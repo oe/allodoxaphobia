@@ -22,6 +22,7 @@
       <div class="xinput-title">{{formItem.label}}</div>
       <div class="xinput-cell" v-if="formItem.type === 'textarea'">
         <textarea
+          @change="onFormItemChange($event, formItem)"
           v-model="form[formItem.key]"
           :placeholder="formItem.placeholder || ''"
           ></textarea>
@@ -37,12 +38,21 @@
         </picker>
       </div>
       <div class="xinput-cell" v-if="formItem.type === 'number'">
-        <input type="number" v-model="form[formItem.key]" :placeholder="formItem.placeholder || ''">
+        <input
+          type="number"
+          v-model="form[formItem.key]"
+          @change="onFormItemChange($event, formItem)"
+          :placeholder="formItem.placeholder || ''">
       </div>
       <div class="xinput-cell" v-if="!formItem.type || formItem.type === 'text'">
-        <input type="text" v-model="form[formItem.key]" :placeholder="formItem.placeholder || ''">
+        <input
+          type="text"
+          v-model="form[formItem.key]"
+          @change="onFormItemChange($event, formItem)"
+          :placeholder="formItem.placeholder || ''">
       </div>
       <div class="xinput-tip" v-if="formItem.tip">{{formItem.tip}}</div>
+      <div class="xinput-tip" v-if="formItem.onChangeTip">{{formTip[formItem.key]}}</div>
     </block>
     <block v-if="!scheme.singleton">
       <div class="xinput-title">选几项</div>
@@ -95,7 +105,8 @@ export default {
     return {
       title: '',
       typeIdx: 0,
-      form: {}
+      form: {},
+      formTip: {}
     }
   },
   mounted () {
@@ -108,19 +119,8 @@ export default {
         console.log('edit page mounted', this.blueprint)
         this.title = this.blueprint.title
         this.typeIdx = allTypes.findIndex(t => t.value === this.blueprint.type)
-
-        const form = Object.assign({}, this.blueprint.form)
-        if (this.scheme.form) {
-          this.scheme.form.forEach(f => {
-            if (f.type !== 'select') return
-            form[f.key] = f.options.indexOf(form[f.key])
-          })
-        }
-        form.allowDuplicated = String(Number(Boolean(form.allowDuplicated)))
-        this.form = form
-      } else {
-        this.onTypeChange()
       }
+      this.onTypeChange()
     })
   },
   computed: {
@@ -194,7 +194,7 @@ export default {
         if (e.isConfirm) return
         console.log(e)
         wx.showModal({
-          title: '保存方案失败',
+          title: '方案保存失败',
           content: e.message,
           showCancel: false
         })
@@ -231,14 +231,47 @@ export default {
     onRadioChnage (e, k) {
       this.form[k] = e.target.value
     },
+    onFormItemChange (e, formItem) {
+      if (!formItem.onChangeTip) return
+      const k = formItem.key
+      const handleName = 'on' + k.charAt(0).toUpperCase() + k.slice(1) + 'Change'
+      if (!this.scheme || !this.scheme[handleName]) return
+      console.warn(e, formItem, handleName, this.formTip)
+      const tipKey = formItem.altTipKey || k
+      this.formTip[tipKey] = this.scheme[handleName](e.target.value, this.form)
+    },
     onTypeChange (e) {
       if (e) this.typeIdx = e.target.value
       console.log('this.schemeType', e, this.schemeType, this.typeIdx)
       const form = schemes.getDefaultSchemeForm(this.schemeType)
       if (this.blueprint && this.blueprint.type === this.schemeType) {
         Object.assign(form, this.blueprint.form)
+        if (this.scheme.form) {
+          this.scheme.form.forEach(f => {
+            if (f.type !== 'select') return
+            form[f.key] = f.options.indexOf(form[f.key])
+          })
+        }
+        form.allowDuplicated = String(Number(Boolean(form.allowDuplicated)))
+        this.form = form
+      } else {
+        form.allowDuplicated = '0'
       }
-      form.allowDuplicated = '0'
+      this.formTip = Object.keys(form).reduce((acc, cur) => {
+        acc[cur] = ''
+        return acc
+      }, {})
+      if (this.scheme.form) {
+        this.$nextTick(() => {
+          this.scheme.form.forEach(f => {
+            if (!f.onChangeTip) return
+            this.onFormItemChange({
+              target: {value: form[f.key]}
+            }, f)
+          })
+        })
+      }
+      console.log('this.formTip', this.formTip)
       console.log('on type change', form)
       this.form = form
     },

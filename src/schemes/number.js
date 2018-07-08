@@ -10,18 +10,37 @@ const child = {
       key: 'min',
       label: '数字范围起点',
       default: 1,
-      type: 'number'
+      type: 'number',
+      altTipKey: 'max',
+      onChangeTip: true
     },
     {
       key: 'max',
       label: '数字范围终点',
       default: 10,
-      type: 'number'
+      type: 'number',
+      onChangeTip: true
     }
   ],
   // 校验数据合法性
   validateForm (form) {
     if (form.min === form.max) throw new Error('区间范围不能相等')
+    if (form.choosedCount > 1000) throw new Error(`😅选 ${form.choosedCount} 个是认真的么? 暂时不支持选出这么多结果啊, 若有使用场景可点左下角 反馈 按钮反馈`)
+    if (form.allowDuplicated) return
+    const totalCount = Math.abs(form.min - form.max) + 1
+    if (form.choosedCount > totalCount) throw new Error(`以上范围有 ${totalCount} 个数字, 无法选出不重复的 ${form.choosedCount} 个`)
+  },
+  onInputChange (form) {
+    if (form.max === '' || form.min === '') return ''
+    return `上述范围内共有 ${Math.abs(form.min - form.max) + 1} 个数字`
+  },
+  onMaxChange (max, form) {
+    console.warn(max, form)
+    return this.onInputChange(form)
+  },
+  onMinChange (min, form) {
+    console.warn(min, form)
+    return this.onInputChange(form)
   },
   // 实际使用前预处理数据
   preprocessForm (form) {

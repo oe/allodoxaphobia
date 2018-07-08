@@ -7,25 +7,35 @@ const presets = [
     type: 'location',
     form: {
       choosedCount: 1,
-      tag: '餐饮',
+      tag: '美食',
       query: '美食',
-      distanceRang: '1km'
+      distanceRang: '500m'
     }
   },
   {
     id: 'allodoxaphobia-eat-what',
-    title: '🍛 吃什么',
+    title: '🍛 晚上做什菜',
     type: 'options',
     form: {
       allowDuplicated: false,
-      choosedCount: 1,
+      choosedCount: 2,
       options: [
-        '湘菜',
-        '烧烤',
-        '粤菜',
-        '川菜',
-        '沙县小吃',
-        '火锅'
+        '炒大白菜',
+        '虎皮尖椒',
+        '茄子豆角',
+        '红烧排骨',
+        '西红柿鸡蛋',
+        '小炒土豆丝',
+        '盐焗鸡翅',
+        '酸豆角',
+        '白灼秋葵',
+        '炒茄子',
+        '酥炸小黄鱼',
+        '水煮鱼',
+        '韭黄鸡蛋',
+        '白灼基围虾',
+        '鸡蛋羹',
+        '鸡蛋羹'
       ].join('\n')
     }
   },
@@ -162,7 +172,7 @@ const presets = [
 ]
 
 export default function () {
-  const ver = '0.9'
+  const ver = '1.3'
   const installedVer = wx.getStorageSync('presets-installed')
   if (installedVer === ver) {
     console.log('presets installed already')
