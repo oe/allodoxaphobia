@@ -8,8 +8,8 @@
 		"newFeature": true
 	},
 	"miniprogramRoot": "./dist/",
-	"compileType": "wx5290debbfcfd01db",
-	"appid": "touristappid",
+	"compileType": "miniprogram",
+	"appid": "wx5290debbfcfd01db",
 	"projectname": "关爱选择困难症",
 	"condition": {
 		"search": {
