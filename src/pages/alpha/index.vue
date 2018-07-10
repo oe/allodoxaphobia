@@ -3,6 +3,7 @@
     <div class="page-main">
       <scroll-view
         v-if="blueprints && blueprints.length"
+        :class="{'is-sorting': isSort}"
         class="blueprint-list">
         <movable-area>
           <movable-view>
@@ -10,10 +11,10 @@
         </movable-area>
         <div
           class="blueprint-item"
-          v-for="bp in blueprints"
-          :key="bp.id"
-          @tap="viewOption(bp.id)">
-          {{bp.title}}
+          v-for="(bp, idx) in blueprints"
+          :key="bp.id">
+          <div class="left-handler" @tap="onSetTop(bp, idx)">🔝</div>
+          <div class="item-innter" @tap="viewOption(bp.id)">{{bp.title}}</div>
         </div>
       </scroll-view>
       <div class="no-blueprints" v-else>
@@ -22,9 +23,9 @@
     </div>
     <div class="toolbar">
       <div class="toolbar-item"></div>
-      <div class="toolbar-item">
+      <div class="toolbar-item" @tap="onToggleSort">
         <div class="icon icon-order"></div>
-        排序
+        {{isSort ? '完成' : '排序'}}
       </div>
       <div class="toolbar-item" @tap="addOption">
         <view class="btn-center icon icon-add"></view>
@@ -43,13 +44,18 @@ import { mapState, mapMutations } from 'vuex'
 import pmixin from '../pmixin'
 export default {
   mixins: [pmixin],
+  name: 'alpha',
   data () {
     return {
-      canScroll: true
+      canScroll: true,
+      isSort: false
     }
   },
   computed: {
-    ...mapState(['blueprints'])
+    ...mapState(['blueprints']),
+    usageTip () {
+      return '欢迎使用小程序, 本程序已预置了一些选择方案, 你可以点击下方的 加号 添加自己的方案, 也可以删除你不需要的方案.'
+    }
   },
   onShow () {
     this.clearBlueprint()
@@ -64,39 +70,62 @@ export default {
     return shareObj
   },
   methods: {
-    ...mapMutations(['clearBlueprint']),
+    ...mapMutations(['clearBlueprint', 'setBp2Top']),
     viewOption (id) {
-      wx.navigateTo({url: `../view/view?id=${id}`})
+      this.isSort = false
+      wx.navigateTo({url: `../view/main?id=${id}`})
     },
     addOption () {
-      wx.navigateTo({url: `../edit/edit`})
+      wx.navigateTo({url: `../edit/main`})
     },
-    onFeedBack () {
-      // let url = 'https://mp.weixin.qq.com/s/0-M2wAiqPioay2BLVWoefg'
-      // let url = 'https://mp.weixin.qq.com/s/SNx2108pLi3gf49bDXhcOg'
-      let url = 'https://mp.weixin.qq.com/s/nfWtbQrcR_yCLfZ7h1QDOQ'
-      url = `../webview/webview?url=${encodeURIComponent(url)}`
-      wx.navigateTo({url})
+    onToggleSort () {
+      this.isSort = !this.isSort
+    },
+    onSetTop (bp, idx) {
+      this.setBp2Top({
+        index: idx
+      })
     }
   }
 }
-
 </script>
 <style lang="scss">
+$left-handler-width: 30px;
 .blueprint-list {
-  // padding-bottom: $bar-height;
-  // overflow-y: auto;
+  .blueprint-item {
+    position: relative;
+    margin: 10px;
+    .item-innter {
+      position: relative;
+      color: #666;
+      padding: 10px 8px;
+      background-color: #efefef;
+      border-radius: 6px;
+      z-index: 2;
+      transition: transform .2s linear;
+      transform: translateX(0);
+    }
 
-  // .is-iphonex & {
-  //   padding-bottom: $bar-height + $iphonex-bottom;
-  // }
-}
-.blueprint-item {
-  color: #666;
-  margin: 10px;
-  padding: 10px 8px;
-  background-color: #efefef;
-  border-radius: 6px;
+    .left-handler {
+      position: absolute;
+      top: 2px;
+      left: 0;
+      bottom: 2px;
+      width: $left-handler-width;
+      padding: 6px 8px;
+      border-radius: 6px;
+      text-align: center;
+      color: white;
+      background-color: #e1e1e1;
+      z-index: 1;
+    }
+  }
+
+  &.is-sorting {
+    .item-innter {
+      transform: translateX($left-handler-width + 20px);
+    }
+  }
 }
 .toolbar {
 

@@ -9,7 +9,13 @@ const child = {
   validateForm (form) {
     const optionCount = this.getOptionCount()
     // 选项不允许重复, 且筛选出的数量超过选项总数量
-    if (!form.allowDuplicated && optionCount <= form.choosedCount) throw new Error(`筛选项数量(${form.choosedCount})不能大于字母总数量(${optionCount})`)
+    if (!form.allowDuplicated && optionCount <= form.choosedCount) {
+      throw new Error(
+        `英文字母总共 ${optionCount} 个, 没法选出不重复的 ${
+          form.choosedCount
+        } 个😳`
+      )
+    }
   },
   getOptionCount () {
     return LETTER_RANGE.charCodeAt(1) - LETTER_RANGE.charCodeAt(0) + 1

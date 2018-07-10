@@ -14,12 +14,21 @@ const store = new Vuex.Store({
     blueprint: null,
     locTotal: 0,
     locReceivedCount: 0,
-    locPageSize: 0
+    locPageSize: 0,
+    guidance: {}
+  },
+  getters: {
+    // whether guidance tip has shown before
+    isGuidanceShown: state => pname => {
+      return state.guidance[pname] || false
+    }
   },
   mutations: {
     init (state) {
-      const blueprints = (wx.getStorageSync('blueprints') || [])
+      const blueprints = wx.getStorageSync('blueprints') || []
+      const guidance = wx.getStorageSync('guidance') || {}
       state.blueprints = blueprints
+      state.guidance = guidance
     },
     switch2 (state, id) {
       state.blueprint = (id && state.blueprints.find(s => s.id === id)) || null
@@ -58,7 +67,7 @@ const store = new Vuex.Store({
       newBps.length && state.blueprints.push(...newBps)
       saveBlueprints(state.blueprints)
     },
-    editBlueprint (state, {id, form}) {
+    editBlueprint (state, { id, form }) {
       console.log('editBlueprint arguments', id, form)
       const blueprint = state.blueprints.find(b => b.id === id)
       if (!blueprint) {
@@ -86,12 +95,25 @@ const store = new Vuex.Store({
         state.locReceivedCount = 0
         state.locPageSize = 0
       }
+    },
+    setBp2Top (state, payload) {
+      const idx = payload.index
+      if (idx === 0 || !state.blueprints[idx]) return
+      const bp = state.blueprints.splice(idx, 1)
+      state.blueprints.unshift(bp[0])
+      saveBlueprints(state.blueprints)
+    },
+    setGuidanceShown (state, payload) {
+      if (state.guidance[payload.pname] === true) return
+      console.log('set ', payload, 'shown')
+      state.guidance[payload.pname] = true
+      wx.setStorageSync('guidance', state.guidance)
     }
   },
   actions: {
     detectDevice (ctx) {
       wx.getSystemInfo({
-        success: (res) => {
+        success: res => {
           let modelmes = res.model
           console.log('system info', res)
           const payload = {

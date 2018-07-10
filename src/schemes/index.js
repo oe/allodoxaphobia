@@ -22,7 +22,7 @@ const schemes = {
 function pickIdxs (len, count, allowDuplicated) {
   const allIdxs = Array.apply(null, Array(len)).map((v, i) => i)
   // 随机排序
-  if (count === len) return allIdxs.sort(() => Math.random() > 0.5 ? -1 : 1)
+  if (count === len) return allIdxs.sort(() => (Math.random() > 0.5 ? -1 : 1))
   const result = []
   while (count--) {
     const idx = Math.floor(Math.random() * allIdxs.length)
@@ -47,24 +47,35 @@ async function getResult (schemeConfig) {
   // 总选项个数
   const optionsCount = await scheme.getOptionCount(schemeForm, schemeConfig)
   if (!schemeForm.allowDuplicated && schemeForm.choosedCount > optionsCount) {
-    let tip = '可用选项不够选'
+    let tip = '可用选项不够选, 这可能是个bug'
     if (!optionsCount && schemeConfig.type === 'location') {
-      tip = '附近有点荒凉啊, 没有找到任何相关位置, 你可以尝试调整范围后再试'
+      tip = `附近有荒无人烟啊, 没有找到与 ${
+        schemeForm.query
+      } 相关位置, 你可以尝试调整范围后再试. 若你确信周边有这样的位置, 可以 编辑 方案, 调整位置的行业类型, 修改关键词. 若反复尝试后也不行, 八成就是百度地图的锅了😅`
     } else {
-      console.error('can not get enough options to choose', schemeConfig, 'optionsCount', optionsCount)
+      console.error(
+        'can not get enough options to choose',
+        schemeConfig,
+        'optionsCount',
+        optionsCount
+      )
     }
     throw new Error(tip)
   }
-  const idxs = pickIdxs(optionsCount, schemeForm.choosedCount || 1, schemeForm.allowDuplicated)
+  const idxs = pickIdxs(
+    optionsCount,
+    schemeForm.choosedCount || 1,
+    schemeForm.allowDuplicated
+  )
   return idxs
-    .map((v) => scheme.getAnOption(v, schemeForm))
+    .map(v => scheme.getAnOption(v, schemeForm))
     .filter(v => typeof v !== 'undefined')
 }
 
 export default {
   // 获取可用的方案类型及描述
   getSchemeTypes () {
-    return Object.keys(schemes).map((k) => {
+    return Object.keys(schemes).map(k => {
       return {
         value: k,
         label: schemes[k].name

@@ -43,6 +43,7 @@
         </poker-item>
       </block>
     </div>
+    <easter-egg v-if="easterEgg"></easter-egg>
     <div v-if="status === 'pending'" class="scheme-pending">
       {{loadingTip}}
     </div>
@@ -75,7 +76,7 @@
       <div class="icon icon-edit"></div>
       编辑
     </div>
-    <div class="toolbar-item" @tap="gotoHelp">
+    <div class="toolbar-item" @tap="onFeedBack">
       <div class="icon icon-feedback"></div>
       反馈
     </div>
@@ -94,8 +95,10 @@ import NoBlueprint from './items/no-blueprint'
 import LocationItem from './items/location'
 import OptionsItem from './items/options'
 import PokerItem from './items/poker'
+import EasterEgg from './items/easter-egg'
 
 export default {
+  name: 'view',
   mixins: [pmixin],
   data () {
     return {
@@ -106,6 +109,7 @@ export default {
       lastShakeTime: 0,
       adjustIdxs: [0],
       ltid: 0,
+      easterEgg: false,
       // 连续点击获取结果的次数
       getResTimes: 0,
       oldAdjustIdxs: [0],
@@ -114,6 +118,7 @@ export default {
   },
   // components,
   components: {
+    EasterEgg,
     NoBlueprint,
     LocationItem,
     OptionsItem,
@@ -133,6 +138,11 @@ export default {
   },
   computed: {
     ...mapState(['blueprint']),
+    usageTip () {
+      let tip = '摇一摇 也可以查看新结果哦.'
+      tip += '点击左下角的 分享 按钮可以复制文字结果, 也可以将也页面分享给其他好友'
+      return tip
+    },
     scheme () {
       if (!this.blueprint) return
       return schemes.getScheme(this.blueprint.type)
@@ -153,8 +163,13 @@ export default {
     loadingTip () {
       let tip = ''
       if (this.getResTimes > 25) {
-        tip += '😅'
-      } else if (this.getResTimes > 15) {
+        this.easterEgg = true
+        setTimeout(() => {
+          this.easterEgg = false
+        }, 8000)
+        return tip
+      }
+      if (this.getResTimes > 15) {
         tip += `点击次数 ${this.getResTimes}, 手机即将爆炸, 倒计时 ${26 - this.getResTimes}`
       } else if (this.getResTimes > 10) {
         tip += '亲, 慢些点, 放轻松☕️, 再拼命按手机就要爆炸啦!'
@@ -175,6 +190,7 @@ export default {
     return shareObj
   },
   onShow () {
+    console.log('on page show', this.isBlueprintChanged, this.blueprint)
     if (this.isBlueprintChanged && this.blueprint) {
       wx.showToast({
         icon: 'none',
@@ -302,17 +318,7 @@ export default {
     onEditBlueprint () {
       const id = this.blueprint.id
       console.log('going to edit of id', id)
-      wx.navigateTo({url: `../edit/edit?id=${id}`})
-    },
-    gotoHelp () {
-      // const qs = this.scheme.getShareQs(this.result, this.blueprint)
-      // const qsStr = 'lzstr=' + LZString.compressToEncodedURIComponent(JSON.stringify(qs))
-      // const shareObj = {
-      //   title: '关爱选择困难症',
-      //   path: '/pages/shared-view/shared-view?' + qsStr
-      // }
-      // wx.navigateTo({url: shareObj.path})
-      wx.navigateTo({url: `../help/help`})
+      wx.navigateTo({url: `../edit/main?id=${id}`})
     },
     onShare () {
       this.$refs.acs.showSheet({
@@ -380,6 +386,7 @@ export default {
   }
   .scheme-error,
   .scheme-pending {
+    margin-top: 10px;
     color: #888;
     height: 60%;
     padding: 10px;

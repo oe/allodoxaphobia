@@ -60,7 +60,7 @@
       <div class="btn-center icon icon-home" @tap="onGohome"></div>
     </div>
     <div class="toolbar-item-2">
-      <div class="toolbar-item" @tap="gotoHelp">
+      <div class="toolbar-item" @tap="onFeedBack">
         <div class="icon icon-feedback"></div>
         反馈
       </div>
@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import schemes from '@/schemes'
 import utils from '@/utils'
 import Actionsheet from '@/components/actionsheet'
@@ -81,6 +82,7 @@ import OptionsItem from '@/pages/view/items/options'
 import PokerItem from '@/pages/view/items/poker'
 
 export default {
+  name: 'shared-view',
   mixins: [pmixin],
   data () {
     return {
@@ -144,9 +146,18 @@ export default {
     }
   },
   computed: {
+    ...mapState(['guidance']),
     scheme () {
       if (!this.blueprint) return
       return schemes.getScheme(this.blueprint.type)
+    },
+    usageTip () {
+      let tip = '点击页面下方中间的按钮可以回到小程序首页哦.'
+      // first time for this user
+      if (!Object.keys(this.guidance).length) {
+        tip += '点击左下角的 分享 按钮可以复制文字结果, 也可以将也页面分享给其他好友'
+      }
+      return tip
     }
   },
   onShareAppMessage () {
@@ -162,11 +173,8 @@ export default {
   methods: {
     onGohome () {
       wx.reLaunch({
-        url: `../alpha/alpha`
+        url: `../alpha/main`
       })
-    },
-    gotoHelp () {
-      wx.navigateTo({url: `../help/help`})
     },
     onShare () {
       this.$refs.acs.showSheet({

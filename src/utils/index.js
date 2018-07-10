@@ -52,9 +52,12 @@ async function getNearbyLocations (data, options = {}) {
   }
   const requestData = Object.assign({}, defaultOptions, data)
   if (typeof requestData.location === 'object') {
-    requestData.location = `${requestData.location.latitude},${requestData.location.longitude}`
+    requestData.location = `${requestData.location.latitude},${
+      requestData.location.longitude
+    }`
   }
-  let rawStr = bdMapSearchApi.split('.com').pop() + '?' + serializeObj(requestData)
+  let rawStr =
+    bdMapSearchApi.split('.com').pop() + '?' + serializeObj(requestData)
   rawStr += bdMapSK
   requestData.sn = md5(fixedEncodeURIComponent(rawStr))
   options.data = requestData
@@ -78,9 +81,10 @@ async function getLocationDetail (uid) {
     ak: bdMapAK,
     timestamp: Date.now()
   }
-  const options = {uid}
+  const options = { uid }
   const requestData = Object.assign({}, defaultOptions, options)
-  let rawStr = bdMapDetailApi.split('.com').pop() + '?' + serializeObj(requestData)
+  let rawStr =
+    bdMapDetailApi.split('.com').pop() + '?' + serializeObj(requestData)
   rawStr += bdMapSK
   requestData.sn = md5(fixedEncodeURIComponent(rawStr))
   options.data = requestData
@@ -98,9 +102,11 @@ async function getLocationDetail (uid) {
 }
 
 function serializeObj (obj) {
-  return Object.keys(obj).map(n => {
-    return fixedEncodeURIComponent(n) + '=' + fixedEncodeURIComponent(obj[n])
-  }).join('&')
+  return Object.keys(obj)
+    .map(n => {
+      return fixedEncodeURIComponent(n) + '=' + fixedEncodeURIComponent(obj[n])
+    })
+    .join('&')
 }
 // 修正 EncodeURIComponent对特殊字符的处理
 function fixedEncodeURIComponent (str) {
@@ -126,7 +132,7 @@ async function getLocation () {
   return new Promise((resolve, reject) => {
     wx.getLocation({
       type: 'gcj02',
-      success: (res) => {
+      success: res => {
         console.log('get location success')
         res.lat = res.latitude
         res.lng = res.longitude
@@ -134,7 +140,7 @@ async function getLocation () {
         // this.statusTip = '坐标获取成功😏'
         resolve(res)
       },
-      fail: (err) => {
+      fail: err => {
         console.log('get location failed', err)
         // this.statusTip = '坐标获取失败😭, 麻烦先授权小程序获取地理位置🙏🏻'
         err.isLocation = true
@@ -161,7 +167,7 @@ function authorize (scope) {
 // 获取微信配置项
 function getSetting () {
   return new Promise((resolve, reject) => {
-    wx.getSetting({success: (res) => resolve(res.authSetting), fail: reject})
+    wx.getSetting({ success: res => resolve(res.authSetting), fail: reject })
   })
 }
 
@@ -189,18 +195,20 @@ function guid () {
 
 function confirm (config) {
   return new Promise((resolve, reject) => {
-    wx.showModal(Object.assign({}, config, {
-      success: (res) => {
-        if (res.confirm) resolve(res)
-        else {
-          res.isConfirm = true
-          reject(res)
+    wx.showModal(
+      Object.assign({}, config, {
+        success: res => {
+          if (res.confirm) resolve(res)
+          else {
+            res.isConfirm = true
+            reject(res)
+          }
+        },
+        fail (err) {
+          console.warn('failed to call wx.showModal with config', config, err)
         }
-      },
-      fail (err) {
-        console.warn('failed to call wx.showModal with config', config, err)
-      }
-    }))
+      })
+    )
   })
 }
 

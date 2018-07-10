@@ -59,6 +59,7 @@
       <div class="xinput-cell">
         <input min="1" type="number" v-model="form.choosedCount">
       </div>
+      <div class="xinput-tip">若选项总数量与选出的个数相等, 且不允许重复结果, 那么小程序会对所有选项进行随机排序</div>
       <div class="xinput-title">是否允许出现重复结果</div>
       <radio-group class="xinput-cell" @change="onRadioChnage($event, 'allowDuplicated')">
         <label>
@@ -83,7 +84,7 @@
     <div class="toolbar-item" @tap="onSave">
       <view class="btn-center icon icon-save"></view>
     </div>
-    <div class="toolbar-item">
+    <div class="toolbar-item" @tap="onFeedBack">
       <div class="icon icon-feedback"></div>
       反馈
     </div>
@@ -100,6 +101,7 @@ import pmixin from '../pmixin'
 const allTypes = schemes.getSchemeTypes()
 
 export default {
+  name: 'edit',
   mixins: [pmixin],
   data () {
     return {
@@ -134,6 +136,9 @@ export default {
     },
     scheme () {
       return schemes.getScheme(this.schemeType)
+    },
+    usageTip () {
+      // return '在录入自定义选项时, 可以从剪贴板粘贴, 也可以扫码录入哦'
     }
   },
   methods: {
@@ -324,7 +329,7 @@ export default {
 
   .xinput-tip {
     margin-top: .3em;
-    color: #a0a0a0;
+    color: #999;
     padding-left: 15px;
     padding-right: 15px;
     font-size: 14px;
