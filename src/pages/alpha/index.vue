@@ -5,10 +5,11 @@
         v-if="blueprints && blueprints.length"
         :class="{'is-sorting': isSort}"
         class="blueprint-list">
-        <movable-area>
-          <movable-view>
-          </movable-view>
-        </movable-area>
+<!--         <SliderLeft
+          v-for="(bp, idx) in blueprints"
+          :title="bp.title"
+          :key="bp.id">
+        </SliderLeft> -->
         <div
           class="blueprint-item"
           v-for="(bp, idx) in blueprints"
@@ -41,6 +42,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+// import SliderLeft from '@/components/slider-left'
 import pmixin from '../pmixin'
 export default {
   mixins: [pmixin],
@@ -51,6 +53,7 @@ export default {
       isSort: false
     }
   },
+  // components: { SliderLeft },
   computed: {
     ...mapState(['blueprints']),
     usageTip () {
@@ -64,7 +67,7 @@ export default {
   onShareAppMessage () {
     const shareObj = {
       title: '关爱选择困难症',
-      path: '/pages/alpha/alpha'
+      path: '/pages/alpha/main'
     }
     console.warn('home page', shareObj)
     return shareObj

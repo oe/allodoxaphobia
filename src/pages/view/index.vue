@@ -184,7 +184,7 @@ export default {
     const qsStr = 'lzstr=' + LZString.compressToEncodedURIComponent(JSON.stringify(qs))
     const shareObj = {
       title: '关爱选择困难症',
-      path: '/pages/shared-view/shared-view?' + qsStr
+      path: '/pages/shared-view/main?' + qsStr
     }
     console.warn(shareObj)
     return shareObj
@@ -271,7 +271,6 @@ export default {
     async getResult () {
       const MIN_TIME_GAP = 500
       this.isBlueprintChanged = false
-
       const lastTime = Date.now()
       this.startTime = lastTime
       this.getResTimes += 1
@@ -311,6 +310,7 @@ export default {
           this.error = e.errMsg || e.message
         }
       }
+      this.isBlueprintChanged = false
     },
     stopShowResult () {
       clearTimeout(this.ltid)

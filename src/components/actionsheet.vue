@@ -104,8 +104,9 @@ export default {
   }
 
   .acs {
-    transition: transform .2s linear;
-    transform: translateY(100%);
+    transition: opacity .3s, transform .3s;
+    transform: translate3d(0, 100%, 0);
+    opacity: 0;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -149,7 +150,7 @@ export default {
     visibility: visible;
 
     .backdrop { opacity: 1; }
-    .acs { transform: translateY(0); }
+    .acs { transform: translateZ(0); opacity: 1;}
   }
 }
 </style>
