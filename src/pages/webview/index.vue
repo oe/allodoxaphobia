@@ -13,6 +13,13 @@ export default {
       url: ''
     }
   },
+  onShareAppMessage () {
+    const shareObj = {
+      title: '关爱选择困难症',
+      path: '/pages/alpha/main'
+    }
+    return shareObj
+  },
   onLoad (options) {
     const query = this.$root.$mp.query
     console.warn(query)

@@ -121,12 +121,18 @@ $left-handler-width: 30px;
       color: white;
       background-color: #e1e1e1;
       z-index: 1;
+      opacity: 0;
     }
   }
 
   &.is-sorting {
     .item-innter {
       transform: translateX($left-handler-width + 20px);
+    }
+
+    .left-handler {
+      transition: opacity .3s;
+      opacity: 1;
     }
   }
 }
