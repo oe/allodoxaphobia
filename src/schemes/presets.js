@@ -34,14 +34,13 @@ const presets = [
         '水煮鱼',
         '韭黄鸡蛋',
         '白灼基围虾',
-        '鸡蛋羹',
         '鸡蛋羹'
       ].join('\n')
     }
   },
   {
     id: 'allodoxaphobia-play',
-    title: '🏖 周末玩什么',
+    title: '⚽️ 周末玩什么',
     type: 'options',
     form: {
       allowDuplicated: false,
@@ -51,7 +50,10 @@ const presets = [
         'K歌',
         '看电影',
         '骑单车',
-        '宅'
+        '宅',
+        '打高尔夫',
+        '打网球',
+        '打羽毛球'
       ].join('\n')
     }
   },
@@ -62,14 +64,7 @@ const presets = [
     form: {
       allowDuplicated: false,
       choosedCount: 1,
-      options: [
-        '⚀',
-        '⚁',
-        '⚂',
-        '⚃',
-        '⚄',
-        '⚅'
-      ].join('\n')
+      options: ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'].join('\n')
     }
   },
   {
@@ -79,11 +74,7 @@ const presets = [
     form: {
       allowDuplicated: false,
       choosedCount: 1,
-      options: [
-        '✌️',
-        '✋',
-        '✊'
-      ].join('\n')
+      options: ['✌️', '✋', '✊'].join('\n')
     }
   },
   {
@@ -93,10 +84,7 @@ const presets = [
     form: {
       allowDuplicated: false,
       choosedCount: 1,
-      options: [
-        '正面',
-        '反面'
-      ].join('\n')
+      options: ['正面', '反面'].join('\n')
     }
   },
   // {
@@ -150,7 +138,7 @@ const presets = [
   },
   {
     id: 'allodoxaphobia-pick-prize-winner',
-    title: '🎁 年会特等奖选手抽取',
+    title: '🎁 年会特等奖抽取',
     type: 'options',
     form: {
       allowDuplicated: false,
@@ -172,7 +160,7 @@ const presets = [
 ]
 
 export default function () {
-  const ver = '1.3'
+  const ver = '1.4'
   const installedVer = wx.getStorageSync('presets-installed')
   if (installedVer === ver) {
     console.log('presets installed already')

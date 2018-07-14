@@ -1,4 +1,7 @@
 $border-color: #e5e5e5;
+$theme-color: #4b6cb7;
+$font-color: #efefef;
+
 @mixin line-base() {
   content: " ";
   position: absolute;

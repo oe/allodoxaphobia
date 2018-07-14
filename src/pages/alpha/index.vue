@@ -5,11 +5,6 @@
         v-if="blueprints && blueprints.length"
         :class="{'is-sorting': isSort}"
         class="blueprint-list">
-<!--         <SliderLeft
-          v-for="(bp, idx) in blueprints"
-          :title="bp.title"
-          :key="bp.id">
-        </SliderLeft> -->
         <div
           class="blueprint-item"
           v-for="(bp, idx) in blueprints"
@@ -23,19 +18,21 @@
       </div>
     </div>
     <div class="toolbar">
-      <div class="toolbar-item"></div>
-      <div class="toolbar-item" @tap="onToggleSort">
-        <div class="icon icon-order"></div>
-        {{isSort ? '完成' : '排序'}}
+      <div class="toolbar-item-2">
+        <div class="toolbar-item" @tap="onToggleSort">
+          <div class="icon icon-order"></div>
+          {{isSort ? '完成' : '排序'}}
+        </div>
       </div>
       <div class="toolbar-item" @tap="addOption">
         <view class="btn-center icon icon-add"></view>
       </div>
-      <div class="toolbar-item" @tap="onFeedBack">
-        <div class="icon icon-feedback"></div>
-        反馈
+      <div class="toolbar-item-2">
+        <div class="toolbar-item" @tap="onFeedBack">
+          <div class="icon icon-feedback"></div>
+          反馈
+        </div>
       </div>
-      <div class="toolbar-item"></div>
     </div>
   </div>
 </template>
@@ -79,6 +76,7 @@ export default {
       wx.navigateTo({url: `../view/main?id=${id}`})
     },
     addOption () {
+      this.isSort = false
       wx.navigateTo({url: `../edit/main`})
     },
     onToggleSort () {
@@ -100,9 +98,11 @@ $left-handler-width: 30px;
     margin: 10px;
     .item-innter {
       position: relative;
-      color: #666;
+      font-weight: 200;
+      // color: #efefef;
       padding: 10px 8px;
-      background-color: #efefef;
+      // background: rgba(0,0,140,.08);
+      background-color: rgba(0,0,140,.3);
       border-radius: 6px;
       z-index: 2;
       transition: transform .2s linear;
@@ -119,7 +119,7 @@ $left-handler-width: 30px;
       border-radius: 6px;
       text-align: center;
       color: white;
-      background-color: #e1e1e1;
+      background-color: rgba(255,255,255,.3);
       z-index: 1;
       opacity: 0;
     }
@@ -136,13 +136,7 @@ $left-handler-width: 30px;
     }
   }
 }
-.toolbar {
 
-  .btn-center {
-    color: white;
-    background-color: rgba(153, 34, 153, .7);
-  }
-}
 
 
 </style>

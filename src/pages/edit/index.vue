@@ -317,36 +317,38 @@ export default {
 
 .edit-page {
   height: 100%;
-  background-color: #efefef;
   .xinput-title {
     margin-top: .77em;
     margin-bottom: .3em;
-    padding-left: 15px;
-    padding-right: 15px;
-    color: #808080;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: darken($font-color, 10%);
     font-size: 14px;
   }
 
   .xinput-tip {
     margin-top: .3em;
-    color: #999;
-    padding-left: 15px;
-    padding-right: 15px;
+    color: darken($font-color, 10%);
+    padding-left: 10px;
+    padding-right: 10px;
     font-size: 14px;
     font-weight: 100;
   }
 
   .xinput-cell {
-    padding: 10px 15px;
+    padding: 10px 10px;
     position: relative;
-    background-color: white;
-
+    background-color: darken($theme-color, 10%);
     @include line-vertical;
 
     textarea {
       height: 200px;
     }
-    input, textarea, picker { color: #333;}
+    input, textarea, picker {
+      caret-color: darken($font-color, 5%);
+      color: $font-color;
+      background-color: darken($theme-color, 10%);
+    }
 
     .scan-btn {
       position: absolute;
@@ -355,21 +357,16 @@ export default {
       border: 1px solid #efefef;
       padding: 4px 6px;
       border-radius: 6px;
-      color: #aaa;
+      color: darken($font-color, 5%);
       font-size: 14px;
 
       &:active {
-        background-color: #efefef;
+        background-color: #ccc;
       }
     }
 
     &:last-child {
       margin-bottom: 30px;
-    }
-  }
-  .toolbar {
-    .btn-center {
-      background-color: #aef4a4;
     }
   }
 }

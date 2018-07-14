@@ -115,16 +115,17 @@ export default {
 </script>
 
 <style lang="scss">
+@import '~@/style/base.scss';
 .location-item {
   padding: 10px;
-  color: #333;
+  color: $font-color;
 }
 
 .location-info {
-  color: #777;
+  color: darken($font-color, 1%);
   font-size: 14px;
-  .title { font-size: 24px; color: #333; }
-  .desc {font-size: 16px; color: #444; }
+  .title { font-size: 24px; color: lighten($font-color, 1%); }
+  .desc {font-size: 16px; }
   .spec .itm {
     padding-right: 5px;
 
@@ -137,7 +138,7 @@ export default {
 .location-tip,
 .location-disclaimer {
   margin: 6px 10px;
-  color: #999;
+  color: darken($font-color, 15%);
   font-size: 14px;
 }
 .location-disclaimer { font-size: 12px; }
@@ -146,7 +147,7 @@ export default {
   text-align: center;
   padding: 8px 16px;
   border-radius: 4px;
-  color: #666;
+  color: darken($font-color, 5%);
   font-size: 14px;
   border: 1px solid #ccc;
   &.primary {

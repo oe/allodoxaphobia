@@ -206,34 +206,23 @@ export default {
 </script>
 
 <style lang="scss">
+@import '~@/style/base.scss';
 .view-page {
   .blueprint-title {
     padding: 4px 8px;
     margin-top: 10px;
     font-size: 20px;
     text-align: center;
-    color: #333;
-  }
-  .blueprint-desc {
-    padding: 0 8px 6px;
-    text-align: center;
-    font-size: 14px;
-    color: #888;
+    color: $font-color;
   }
   .scheme-error,
   .scheme-pending {
-    color: #888;
+    color: darken($font-color, 5%);
     height: 60%;
     padding: 8px;
     display: flex;//必须有，不然没有效果
     justify-content: center;
     align-items: center;
-  }
-  .toolbar {
-    .btn-center {
-      background-color: #2f89fc;
-      color: white;
-    }
   }
 
 }

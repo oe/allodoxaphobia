@@ -6,10 +6,10 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarBackgroundColor: '#aef4a4',
-    navigationBarTextStyle: 'black',
-    backgroundColor: '#aef4a4',
-    backgroundTextStyle: 'dark',
+    // navigationBarBackgroundColor: '#aef4a4',
+    // navigationBarTextStyle: 'black',
+    // backgroundColor: '#aef4a4',
+    // backgroundTextStyle: 'dark',
     navigationBarTitleText: '添加选项'
   }
 }

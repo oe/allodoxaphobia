@@ -370,24 +370,25 @@ export default {
 </script>
 
 <style lang="scss">
+@import '~@/style/base.scss';
 .view-page {
   .blueprint-title {
     padding: 4px 8px;
     margin-top: 10px;
     font-size: 20px;
     text-align: center;
-    color: #333;
+    color: $font-color;
   }
   .blueprint-desc {
     padding: 0 8px 6px;
     text-align: center;
     font-size: 14px;
-    color: #888;
+    color: darken($font-color, 5%);
   }
   .scheme-error,
   .scheme-pending {
     margin-top: 10px;
-    color: #888;
+    color: darken($font-color, 5%);
     height: 60%;
     padding: 10px;
     font-size: 16px;
@@ -395,12 +396,5 @@ export default {
     justify-content: center;
     align-items: center;
   }
-  .toolbar {
-    .btn-center {
-      background-color: #2f89fc;
-      color: white;
-    }
-  }
-
 }
 </style>

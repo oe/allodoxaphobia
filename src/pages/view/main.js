@@ -6,10 +6,10 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarBackgroundColor: '#2f89fc',
-    navigationBarTextStyle: 'white',
-    backgroundColor: '#2f89fc',
-    backgroundTextStyle: 'dark',
+    // navigationBarBackgroundColor: '#2f89fc',
+    // navigationBarTextStyle: 'white',
+    // backgroundColor: '#2f89fc',
+    // backgroundTextStyle: 'dark',
     navigationBarTitleText: '查看结果'
   }
 }

@@ -12,8 +12,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import '~@/style/base.scss';
 .options-item {
-  color: #333;
+  color: darken($font-color, 5%);
   padding: 10px 10px;
   font-size: 50px;
   text-align: center;

@@ -16,9 +16,10 @@ export default {
     pages: [], // Will be filled in webpack
     window: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+      backgroundColor: '#4b6cb7',
+      navigationBarBackgroundColor: '#4b6cb7',
+      navigationBarTitleText: '关爱选择困难症',
+      navigationBarTextStyle: 'white'
     }
   }
 }
