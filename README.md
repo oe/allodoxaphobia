@@ -1,6 +1,11 @@
-# mp-vue
+# 小程序 关爱选择困难症
+本项目基于 [mpvue](https://github.com/Meituan-Dianping/mpvue) 开发, **现开源并已不再维护**.
 
-> A Vue.js project
+
+微信扫描下面二维码可以体验
+
+![miniapp](./miniapp.jpg)
+
 
 ## Build Setup
 
